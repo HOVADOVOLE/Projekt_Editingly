@@ -266,101 +266,188 @@ kv_string = '''
     BoxLayout:
         id: New
         orientation: 'vertical'
+        size_hint: 1, 1
+        padding: 10
 
-        size_hint: None, 1
         GridLayout:
-            size_hint: None, 1
-            background_color: 1, 0, 0, 1
             cols: 1
-            
+            size_hint: 1, 1
+            spacing: 0
+
             Button:
-                column: 1
                 background_normal: 'images/icons/kebab.png'
-                # Zmenší obrázek na velikost tlačítka
                 size_hint: None, None
                 size: 50, 50
                 on_release: root.toggle_panel()
-                
+
             GridLayout:
                 cols: 2
                 rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
 
                 Image:
                     source: 'images/icons/add.png'
                     size_hint: None, None
+                    size: 50, 50
+
                 Button:
                     text: "New Project"
                     size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
             GridLayout:
                 cols: 2
                 rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
 
                 Image:
                     source: 'images/icons/open.png'
                     size_hint: None, None
+                    size: 50, 50
+
                 Button:
                     text: "Load Project"
                     size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
             GridLayout:
                 cols: 2
                 rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
 
                 Image:
                     source: 'images/icons/save.png'
                     size_hint: None, None
+                    size: 50, 50
+
                 Button:
                     text: "Save"
                     size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
             GridLayout:
                 cols: 2
                 rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
 
                 Image:
                     source: 'images/icons/robot.png'
                     size_hint: None, None
+                    size: 50, 50
+
                 Button:
                     text: "Generate Subtitles"
                     size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
             GridLayout:
                 cols: 2
                 rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
 
                 Image:
                     source: 'images/icons/table.png'
                     size_hint: None, None
+                    size: 50, 50
+
                 Button:
                     text: "Hide Table"
                     size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
             GridLayout:
                 cols: 2
                 rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
 
                 Image:
                     source: 'images/icons/video.png'
                     size_hint: None, None
+                    size: 50, 50
+
                 Button:
                     text: "Hide Video"
                     size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
             GridLayout:
                 cols: 2
                 rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
 
                 Image:
                     source: 'images/icons/sound-wave.png'
                     size_hint: None, None
+                    size: 50, 50
+
                 Button:
                     text: "Hide sound wave"
                     size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
             GridLayout:
                 cols: 2
                 rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
+                pos_hint: {"bottom": 0}
 
                 Image:
                     source: 'images/icons/help.png'
                     size_hint: None, None
+                    size: 50, 50
+
                 Button:
                     text: "Help"
                     size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
         
 '''
 Builder.load_string(kv_string)
@@ -383,7 +470,7 @@ class SidePanel(BoxLayout):
         self.visible = True
 
     def hide(self):
-        anim = Animation(width=125, duration=0.15)
+        anim = Animation(width=60, duration=0.15)
         anim.start(self)
         self.visible = False
 
@@ -391,7 +478,7 @@ class MyApp(App):
     def build(self):
         layout = FloatLayout()
         
-        side_panel = SidePanel(size_hint=(None, 1), width=125, pos_hint={"right": 1})
+        side_panel = SidePanel(size_hint=(None, 1), width=60, pos_hint={"right": 1})
         layout.add_widget(side_panel)
         return layout
 
