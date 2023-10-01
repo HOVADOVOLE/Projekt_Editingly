@@ -15,6 +15,9 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.image import Image
+from kivy.graphics import *
+from kivy.core.window import Window
 
 class SidePanel(Widget):
     '''A panel widget that attach to a side of the screen
@@ -260,30 +263,106 @@ class SidePanel(Widget):
 kv_string = '''
 <SidePanel>:
     orientation: 'vertical'
-    Button:
-        text: ''
-        on_release: root.toggle_panel()
     BoxLayout:
         id: New
         orientation: 'vertical'
-        Button:
-            text: 'New Project'
-        Button:
-            text: "Load Project"
-        Button:
-            text: "Save"
-        Button:
-            text: "Generate Subtitles"
-        Button:
-            text: "Hide Table"
-        Button:
-            text: "Hide Video Player"
-        Button:
-            text: "Hide Waveform"
-        Button:
-            text: "Help"
-'''
 
+        size_hint: None, 1
+        GridLayout:
+            size_hint: None, 1
+            background_color: 1, 0, 0, 1
+            cols: 1
+            
+            Button:
+                column: 1
+                background_normal: 'images/icons/kebab.png'
+                # Zmenší obrázek na velikost tlačítka
+                size_hint: None, None
+                size: 50, 50
+                on_release: root.toggle_panel()
+                
+            GridLayout:
+                cols: 2
+                rows: 1
+
+                Image:
+                    source: 'images/icons/add.png'
+                    size_hint: None, None
+                Button:
+                    text: "New Project"
+                    size_hint: None, None
+            GridLayout:
+                cols: 2
+                rows: 1
+
+                Image:
+                    source: 'images/icons/open.png'
+                    size_hint: None, None
+                Button:
+                    text: "Load Project"
+                    size_hint: None, None
+            GridLayout:
+                cols: 2
+                rows: 1
+
+                Image:
+                    source: 'images/icons/save.png'
+                    size_hint: None, None
+                Button:
+                    text: "Save"
+                    size_hint: None, None
+            GridLayout:
+                cols: 2
+                rows: 1
+
+                Image:
+                    source: 'images/icons/robot.png'
+                    size_hint: None, None
+                Button:
+                    text: "Generate Subtitles"
+                    size_hint: None, None
+            GridLayout:
+                cols: 2
+                rows: 1
+
+                Image:
+                    source: 'images/icons/table.png'
+                    size_hint: None, None
+                Button:
+                    text: "Hide Table"
+                    size_hint: None, None
+            GridLayout:
+                cols: 2
+                rows: 1
+
+                Image:
+                    source: 'images/icons/video.png'
+                    size_hint: None, None
+                Button:
+                    text: "Hide Video"
+                    size_hint: None, None
+            GridLayout:
+                cols: 2
+                rows: 1
+
+                Image:
+                    source: 'images/icons/sound-wave.png'
+                    size_hint: None, None
+                Button:
+                    text: "Hide sound wave"
+                    size_hint: None, None
+            GridLayout:
+                cols: 2
+                rows: 1
+
+                Image:
+                    source: 'images/icons/help.png'
+                    size_hint: None, None
+                Button:
+                    text: "Help"
+                    size_hint: None, None
+        
+'''
 Builder.load_string(kv_string)
 
 class SidePanel(BoxLayout):
@@ -311,9 +390,11 @@ class SidePanel(BoxLayout):
 class MyApp(App):
     def build(self):
         layout = FloatLayout()
+        
         side_panel = SidePanel(size_hint=(None, 1), width=125, pos_hint={"right": 1})
         layout.add_widget(side_panel)
         return layout
 
 if __name__ == '__main__':
+    Window.clearcolor = (0.2, 0.2, 0.2, 1)
     MyApp().run()
