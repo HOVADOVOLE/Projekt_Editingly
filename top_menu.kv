@@ -1,106 +1,63 @@
-#:kivy 2.0.0
+#:kivy 2.2.1
 FloatLayout:
-    GridLayout:
-        cols: 5
-    
-        id: layout
-        Button:
-            size_hint: None, None
-            pos_hint: {"center_x": 0.5, "center_y": 0.8 }
-            size: 60, 40
+    id: layout
+    AppMenu:
+        id: app_menu
+        top: root.height
+        cancel_handler_widget: layout
+
+        AppMenuTextItem:
             text: "File"
-            on_release: context_menu.show(*app.root_window.mouse_pos)
-    
-        ContextMenu:
-            id: context_menu
-            visible: False
-            cancel_handler_widget: layout
-    
-            ContextMenuTextItem:
-                text: "New"
-            ContextMenuTextItem:
-                text: "Open"
-            ContextMenuTextItem:
-                text: "Save"
-            ContextMenuTextItem:
-                text: "Save as ..."
-            ContextMenuTextItem:
-                text: "Exit"
-                on_release: app.stop()
-                
-        Button:
-            size_hint: None, None
-            pos_hint: {"center_x": 0.5, "center_y": 0.8 }
-            size: 60, 40
+            ContextMenu:
+                ContextMenuTextItem:
+                    text: "New"
+                ContextMenuTextItem:
+                    text: "Open"
+                ContextMenuTextItem:
+                    text: "Save"
+                ContextMenuTextItem:
+                    text: "Save as..."
+                ContextMenuDivider:
+                ContextMenuTextItem:
+                    text: "Exit"
+                    on_release: app.stop()
+        AppMenuTextItem:
             text: "Edit"
-            on_release: context_menu2.show(*app.root_window.mouse_pos)
-        ContextMenu:
-            id: context_menu2
-            visible: False
-            cancel_handler_widget: layout
-            
-            ContextMenuTextItem:
-                text: "Undo"
-            ContextMenuTextItem:
-                text: "Redo"
-            ContextMenuTextItem:
-                text: "Copy"
-            ContextMenuTextItem:
-                text: "Cut"
-            ContextMenuTextItem:
-                text: "Paste"
-            ContextMenuTextItem:
-                text: "Select All"    
-            
-        Button:
-            size_hint: None, None
-            pos_hint: {"center_x": 0.5, "center_y": 0.8 }
-            size: 60, 40
+            ContextMenu:
+                ContextMenuTextItem:
+                    text: "Undo"
+                ContextMenuTextItem:
+                    text: "Redo"
+                ContextMenuDivider:
+                ContextMenuTextItem:
+                    text: "Copy"
+                ContextMenuTextItem:
+                    text: "Cut"
+                ContextMenuTextItem:
+                    text: "Select all"
+        AppMenuTextItem:
             text: "Tools"
-            on_release: context_menu3.show(*app.root_window.mouse_pos)
-            
-        ContextMenu:
-            id: context_menu3
-            visible: False
-            cancel_handler_widget: layout
-            
-            ContextMenuTextItem:
-                text: "Split subtitle..."
-            ContextMenuTextItem:
-                text: "Join subtitles..."
-            ContextMenuTextItem:
-                text: "Append subtitles..."
-                
-        Button:
-            size_hint: None, None
-            pos_hint: {"center_x": 0.5, "center_y": 0.8 }
-            size: 60, 40
+            ContextMenu:
+                ContextMenuTextItem:
+                    text: "Split subtitle..."
+                ContextMenuTextItem:
+                    text: "Join subtitles..."
+                ContextMenuTextItem:
+                    text: "Append subtitles..."
+        AppMenuTextItem:
             text: "Options"
-            on_release: context_menu4.show(*app.root_window.mouse_pos)
-        ContextMenu:
-            id: context_menu4
-            visible: False
-            cancel_handler_widget: layout
-        
-            ContextMenuTextItem:
-                text: "Settings..."
-            ContextMenuTextItem:
-                text: "Choose language... [English]"
-                
-        Button:
-            size_hint: None, None
-            pos_hint: {"center_x": 0.5, "center_y": 0.8 }
-            size: 60, 40
+            ContextMenu:
+                ContextMenuTextItem:
+                    text: "Settings..."
+                ContextMenuTextItem:
+                    text: "Choose language... [English]"
+        AppMenuTextItem:
             text: "Help"
-            on_release: context_menu5.show(*app.root_window.mouse_pos)
-        ContextMenu:
-            id: context_menu5
-            visible: False
-            cancel_handler_widget: layout
-            
-            ContextMenuTextItem:
-                text: "Check for updates..."
-            ContextMenuTextItem:
-                text: "Help"
-            ContextMenuTextItem:
-                text: "About"
+            ContextMenu:
+                ContextMenuTextItem:
+                    text: "Check for updates..."
+                ContextMenuDivider:
+                ContextMenuTextItem:
+                    text: "Help"
+                ContextMenuTextItem:
+                    text: "About"
