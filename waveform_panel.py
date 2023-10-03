@@ -23,9 +23,43 @@ from kivy.uix.label import Label
 # within a minimum bound and / or maximum
 # bound – within a numeric range.
 from kivy.properties  import NumericProperty
- 
+ # import buiilder
+from kivy.lang import Builder
 # class in which we are defining the
 # sliders and its effects
+
+kv = """
+FloatLayout:
+    GridLayout:
+        cols: 1
+        rows: 1
+        GridLayout:
+            cols: 1
+            rows: 2
+            GridLayout:
+                cols: 2
+                rows: 1
+                Label:
+                    text: "Video position:"
+        ----------------------
+        GridLayout:
+            cols: 1
+            rows: 2
+
+            canvas:
+                Color:
+                    rgba: 0, 0, 1, 1  # Barva pozadí
+                Rectangle:
+                    size: self.width * 0.85, 250
+
+            Slider:
+                min: 0
+                max: 100
+                id: brightnessControl
+                size_hint: None, None
+                size: self.parent.width * 0.85, 50
+
+"""
 class WidgetContainer(GridLayout):
  
     def __init__(self, **kwargs):
@@ -39,8 +73,8 @@ class WidgetContainer(GridLayout):
 # The app class
 class SliderExample(App):
     def build(self):
-        widgetContainer = WidgetContainer()
-        return widgetContainer
+        #widgetContainer = WidgetContainer()
+        return Builder.load_string(kv)
   
  
 # creating the object root for ButtonApp() class 
