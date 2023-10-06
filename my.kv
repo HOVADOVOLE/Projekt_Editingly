@@ -1,0 +1,60 @@
+<FloatLayout>:
+    # Komplet celý box
+    GridLayout:
+        cols: 2
+        rows: 1
+        color: 1,1,0,1
+        size_hint: 1, 0.2
+
+        # Box s tlačítky
+        GridLayout:
+            cols: 1
+            rows: 2
+            max_size: self.parent.width * 0.15, 1
+            size_hint: None, 1
+            size: self.parent.width * 0.15, 1
+
+            # Řádek s Labelem a inputem
+            GridLayout:
+                cols: 2
+                rows: 1
+                size: 1, 0.5
+                Label:
+                    text: "Video position:"
+                Button:
+                    text: "Set"
+                    size: 0.3, 1
+
+            # Řádek s tlačítky na posuv / zastavení
+            GridLayout:
+                cols: 3
+                rows: 1
+                size: 1, 0.5
+                Button:
+                    size: 0.3, 0.5
+                    text: "<<<"
+                Button:
+                    size: 0.3, 0.5
+                    text: "||"
+                Button:
+                    size: 0.3, 0.5
+                    text: ">>>"
+
+        # Box se sliderem a přípravou pro zvukovou formu
+        GridLayout:
+            cols: 1
+            rows: 2
+            size_hint: 0.70, 1
+            pos_hint: {"right": 1}
+            # TODO - Posunutí kousek nahoru [OPTIONAL]
+            Button:
+                text: "Interactive sound wave"
+                size_hint: None, None
+                size: self.parent.width, self.parent.height * 0.7
+            Slider:
+                min: 0
+                max: 100
+                id: brightnessControl
+                size_hint: None, None
+                size: self.parent.width, 50
+
