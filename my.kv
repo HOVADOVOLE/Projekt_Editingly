@@ -1,60 +1,68 @@
 <FloatLayout>:
     # Komplet celý box
-    GridLayout:
-        cols: 2
-        rows: 1
-        color: 1,1,0,1
+    BoxLayout:
+        orientation: 'vertical'
         size_hint: 1, 0.2
 
-        # Box s tlačítky
         GridLayout:
-            cols: 1
-            rows: 2
-            max_size: self.parent.width * 0.15, 1
-            size_hint: None, 1
-            size: self.parent.width * 0.15, 1
+            cols: 2
+            rows: 1
+            # Box s tlačítky
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: None, 1
+                width: self.parent.width * 0.15
 
-            # Řádek s Labelem a inputem
-            GridLayout:
-                cols: 2
-                rows: 1
-                size: 1, 0.5
-                Label:
-                    text: "Video position:"
-                Button:
-                    text: "Set"
-                    size: 0.3, 1
+                # Řádek s Labelem a inputem
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint: 1, None
+                    height: self.minimum_height
 
-            # Řádek s tlačítky na posuv / zastavení
-            GridLayout:
-                cols: 3
-                rows: 1
-                size: 1, 0.5
-                Button:
-                    size: 0.3, 0.5
-                    text: "<<<"
-                Button:
-                    size: 0.3, 0.5
-                    text: "||"
-                Button:
-                    size: 0.3, 0.5
-                    text: ">>>"
+                    Label:
+                        text: "Video position:"
+                        size_hint: 0.5, None
+                        height: self.texture_size[1]
+                        halign: 'right'
 
-        # Box se sliderem a přípravou pro zvukovou formu
-        GridLayout:
-            cols: 1
-            rows: 2
-            size_hint: 0.70, 1
-            pos_hint: {"right": 1}
-            # TODO - Posunutí kousek nahoru [OPTIONAL]
-            Button:
-                text: "Interactive sound wave"
-                size_hint: None, None
-                size: self.parent.width, self.parent.height * 0.7
-            Slider:
-                min: 0
-                max: 100
-                id: brightnessControl
-                size_hint: None, None
-                size: self.parent.width, 50
+                    TextInput:
+                        id: time_input
+                        size_hint: 0.5, None
+                        height: self.minimum_height
+                        hint_text: 'Enter time (HH:MM:SS:ms)'
+                        text: '00:00:00,000' # Defaultní hodnota
+                        multiline: False
+                        input_filter: lambda text, from_undo: text if from_undo else ("".join([c for c in text if c.isdigit() or c == ':']))
 
+                # Řádek s tlačítky na posuv / zastavení
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size: self.parent.width, 0.5 * self.parent.height
+                    Button:
+                        size_hint: 0.25, 0.5
+                        text: "<<<"
+                        pos_hint: {"left": 1}
+                    Button:
+                        size_hint: 0.25, 0.5
+                        text: "||"
+                        pos_hint: {"center_x": 0.5}  # Adjusted position for center alignment
+                    Button:
+                        size_hint: 0.25, 0.5
+                        text: ">>>"
+                        pos_hint: {"right": 1}
+
+            # Box se sliderem a přípravou pro zvukovou formu
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: 0.70, 1
+                Button:
+                    text: "Interactive sound wave"
+                    pos_hint: {'center_x': 0.45}
+                    size_hint: 0.8, 0.7
+                Slider:
+                    pos_hint: {'center_x': 0.45}
+                    min: 0
+                    max: 100
+                    id: brightnessControl
+                    size_hint: 0.8, 0.1
