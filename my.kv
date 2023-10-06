@@ -1,4 +1,4 @@
-<FloatLayout>:
+FloatLayout:
     # Komplet celý box
     BoxLayout:
         orientation: 'vertical'
@@ -43,6 +43,7 @@
                         size_hint: 0.25, 0.5
                         text: "<<<"
                         pos_hint: {"left": 1}
+                        on_release: app.move_slider_backward()  # Při kliknutí zavolá funkci move_slider_backward()
                     Button:
                         size_hint: 0.25, 0.5
                         text: "||"
@@ -51,6 +52,7 @@
                         size_hint: 0.25, 0.5
                         text: ">>>"
                         pos_hint: {"right": 1}
+                        on_release: app.move_slider_forward()  # Při kliknutí zavolá funkci move_slider_forward()
 
             # Box se sliderem a přípravou pro zvukovou formu
             BoxLayout:
