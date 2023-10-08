@@ -13,18 +13,18 @@ class InteractiveTableApp(App):
         table_layout = GridLayout(cols=4, size_hint=(0.5, 0.7), pos_hint={'top': 0.7, 'left': 1})
         header_labels = ['#', 'Start time', 'End time', 'Text']
         for label_text in header_labels:
-            header_label = Label(text=label_text, size_hint=(None, None), height=40)
-            table_layout.add_widget(header_label)
-
-
-        rowGrid = GridLayout(cols=4, size_hint=(0.5, 0.7), pos_hint={'top': 0.7, 'left': 1})
+            if label_text == '#':
+                header_label = Label(text=label_text, size_hint=(0.1, None), height=40)
+                table_layout.add_widget(header_label)
+            else:
+                header_label = Label(text=label_text, size_hint=(0.3, None), height=40)
+                table_layout.add_widget(header_label)
         # Vytvoření tabulky
         for i in range(1, 7):  # 6 řádků
-            rowGrid.add_widget(Label(text=str(i), size_hint=(None, None), height=40))  # Číslo řádku
+            table_layout.add_widget(Label(text=str(i), size_hint=(0.1, None), height=40))  # Číslo řádku
             for j in range(3):  # 3 sloupce s daty (bez čísla řádku)
-                text_input = TextInput(multiline=False, size_hint=(None, None), height=40)
-                rowGrid.add_widget(text_input)
-        table_layout.add_widget(rowGrid)
+                text_input = TextInput(multiline=False, size_hint=(0.3, None), height=40)
+                table_layout.add_widget(text_input)
         layout.add_widget(table_layout)
         return layout
 
