@@ -6,8 +6,9 @@ import top_menu
 
 class MainApp(App):
     def build(self):
+        return Builder.load_file('ui.kv') # TODO nefunguje
         #return Builder.load_file('top_menu.kv')
-        return top_menu.MyApp()
+        #return top_menu.MyApp()
     
 app = MainApp()
 app.run()
