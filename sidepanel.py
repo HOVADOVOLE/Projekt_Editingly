@@ -258,209 +258,20 @@ class SidePanel(Widget):
         if self.corner.on_touch_up(touch):
             return True
         return super(SidePanel, self).on_touch_up(touch)
-    
-# Kv file defining the SidePanel
-kv_string = '''
-<SidePanel>:
-    orientation: 'vertical'
-    BoxLayout:
-        id: New
-        orientation: 'vertical'
-        size_hint: 1, 1
-        padding: 10
-
-        GridLayout:
-            cols: 1
-            size_hint: 1, 1
-            spacing: 0
-
-            Button:
-                background_normal: 'images/icons/kebab.png'
-                size_hint: None, None
-                size: 50, 50
-                on_release: root.toggle_panel()
-
-            GridLayout:
-                cols: 2
-                rows: 1
-                size_hint: 1, None
-                height: 50
-                spacing: 5
-
-                Image:
-                    source: 'images/icons/add.png'
-                    size_hint: None, None
-                    size: 50, 50
-
-                Button:
-                    text: "New Project"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 160
-                    height: 50
-
-            GridLayout:
-                cols: 2
-                rows: 1
-                size_hint: 1, None
-                height: 50
-                spacing: 5
-
-                Image:
-                    source: 'images/icons/open.png'
-                    size_hint: None, None
-                    size: 50, 50
-
-                Button:
-                    text: "Load Project"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 160
-                    height: 50
-
-            GridLayout:
-                cols: 2
-                rows: 1
-                size_hint: 1, None
-                height: 50
-                spacing: 5
-
-                Image:
-                    source: 'images/icons/save.png'
-                    size_hint: None, None
-                    size: 50, 50
-
-                Button:
-                    text: "Save"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 160
-                    height: 50
-
-            GridLayout:
-                cols: 2
-                rows: 1
-                size_hint: 1, None
-                height: 50
-                spacing: 5
-
-                Image:
-                    source: 'images/icons/robot.png'
-                    size_hint: None, None
-                    size: 50, 50
-
-                Button:
-                    text: "Generate Subtitles"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 160
-                    height: 50
-
-            GridLayout:
-                cols: 2
-                rows: 1
-                size_hint: 1, None
-                height: 50
-                spacing: 5
-
-                Image:
-                    source: 'images/icons/table.png'
-                    size_hint: None, None
-                    size: 50, 50
-
-                Button:
-                    text: "Hide Table"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 160
-                    height: 50
-
-            GridLayout:
-                cols: 2
-                rows: 1
-                size_hint: 1, None
-                height: 50
-                spacing: 5
-
-                Image:
-                    source: 'images/icons/video.png'
-                    size_hint: None, None
-                    size: 50, 50
-
-                Button:
-                    text: "Hide Video"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 160
-                    height: 50
-
-            GridLayout:
-                cols: 2
-                rows: 1
-                size_hint: 1, None
-                height: 50
-                spacing: 5
-
-                Image:
-                    source: 'images/icons/sound-wave.png'
-                    size_hint: None, None
-                    size: 50, 50
-
-                Button:
-                    text: "Hide sound wave"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 160
-                    height: 50
-
-            GridLayout:
-                cols: 2
-                rows: 1
-                size_hint: 1, None
-                height: 50
-                spacing: 5
-                pos_hint: {"bottom": 0}
-
-                Image:
-                    source: 'images/icons/help.png'
-                    size_hint: None, None
-                    size: 50, 50
-
-                Button:
-                    text: "Help"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 160
-                    height: 50
-        
-'''
-Builder.load_string(kv_string)
 
 class SidePanel(BoxLayout):
     def __init__(self, **kwargs):
+        self.size_hint = (None, 1)
+        self.width = 60
+        self.pos_hint = {"right": 1}
+
+        Builder.load_file('sidepanel.kv')
         super().__init__(**kwargs)
         self.visible = False
 
     def toggle_panel(self):
         if self.visible:
             self.hide()
-            
         else:
             self.show()
 
@@ -473,15 +284,3 @@ class SidePanel(BoxLayout):
         anim = Animation(width=60, duration=0.15)
         anim.start(self)
         self.visible = False
-
-class MyApp(App):
-    def build(self):
-        layout = FloatLayout()
-        
-        side_panel = SidePanel(size_hint=(None, 1), width=60, pos_hint={"right": 1})
-        layout.add_widget(side_panel)
-        return layout
-
-if __name__ == '__main__':
-    Window.clearcolor = (0.2, 0.2, 0.2, 1)
-    MyApp().run()

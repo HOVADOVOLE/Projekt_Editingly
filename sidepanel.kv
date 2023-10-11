@@ -1,0 +1,187 @@
+<SidePanel>:
+    orientation: 'vertical'
+    BoxLayout:
+        id: New
+        orientation: 'vertical'
+        size_hint: 1, 1
+        padding: 10
+
+        GridLayout:
+            cols: 1
+            size_hint: 1, 1
+            spacing: 0
+
+            Button:
+                background_normal: 'images/icons/kebab.png'
+                size_hint: None, None
+                size: 50, 50
+                on_release: root.toggle_panel()
+
+            GridLayout:
+                cols: 2
+                rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
+
+                Image:
+                    source: 'images/icons/add.png'
+                    size_hint: None, None
+                    size: 50, 50
+
+                Button:
+                    text: "New Project"
+                    size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
+            GridLayout:
+                cols: 2
+                rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
+
+                Image:
+                    source: 'images/icons/open.png'
+                    size_hint: None, None
+                    size: 50, 50
+
+                Button:
+                    text: "Load Project"
+                    size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
+            GridLayout:
+                cols: 2
+                rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
+
+                Image:
+                    source: 'images/icons/save.png'
+                    size_hint: None, None
+                    size: 50, 50
+
+                Button:
+                    text: "Save"
+                    size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
+            GridLayout:
+                cols: 2
+                rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
+
+                Image:
+                    source: 'images/icons/robot.png'
+                    size_hint: None, None
+                    size: 50, 50
+
+                Button:
+                    text: "Generate Subtitles"
+                    size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
+            GridLayout:
+                cols: 2
+                rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
+
+                Image:
+                    source: 'images/icons/table.png'
+                    size_hint: None, None
+                    size: 50, 50
+
+                Button:
+                    text: "Hide Table"
+                    size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
+            GridLayout:
+                cols: 2
+                rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
+
+                Image:
+                    source: 'images/icons/video.png'
+                    size_hint: None, None
+                    size: 50, 50
+
+                Button:
+                    text: "Hide Video"
+                    size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
+            GridLayout:
+                cols: 2
+                rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
+
+                Image:
+                    source: 'images/icons/sound-wave.png'
+                    size_hint: None, None
+                    size: 50, 50
+
+                Button:
+                    text: "Hide sound wave"
+                    size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
+
+            GridLayout:
+                cols: 2
+                rows: 1
+                size_hint: 1, None
+                height: 50
+                spacing: 5
+                pos_hint: {"bottom": 0}
+
+                Image:
+                    source: 'images/icons/help.png'
+                    size_hint: None, None
+                    size: 50, 50
+
+                Button:
+                    text: "Help"
+                    size_hint: None, None
+                    text_size: 140, 50
+                    halign: 'right'
+                    valign: 'middle'
+                    width: 160
+                    height: 50
