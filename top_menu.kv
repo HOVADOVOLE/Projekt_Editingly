@@ -4,8 +4,14 @@
         id: layout
         AppMenu:
             id: app_menu
-            top: root.height
+            pos_hint: {"top": 1}
             cancel_handler_widget: layout
+            canvas.before:
+                Color:
+                    rgba: 0.929, 0.929, 0.929, 1  # Barva pozadí #EDEDED
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
 
             AppMenuTextItem:
                 text: "File"

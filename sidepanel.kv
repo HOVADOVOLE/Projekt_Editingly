@@ -1,5 +1,11 @@
 <SidePanel>:
     orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: 0.494, 0.494, 0.494, 1  # Barva pozadí #7e7e7e
+        Rectangle:
+            pos: self.pos
+            size: self.size
     BoxLayout:
         id: New
         orientation: 'vertical'

@@ -261,9 +261,9 @@ class SidePanel(Widget):
 
 class SidePanel(BoxLayout):
     def __init__(self, **kwargs):
-        self.size_hint = (None, 1)
+        self.size_hint = (None, 0.97)
         self.width = 60
-        self.pos_hint = {"right": 1}
+        self.pos_hint = {"right": 1, "bottom": 1}
 
         Builder.load_file('sidepanel.kv')
         super().__init__(**kwargs)
