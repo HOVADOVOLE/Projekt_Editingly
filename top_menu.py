@@ -1,11 +1,9 @@
-from kivy.app import App
 from kivy.lang import Builder
+from kivy.uix.boxlayout import BoxLayout
 from kivy_garden.contextmenu import ContextMenu
 
-class MyApp(App):
-    def build(self):
-        self.title = 'Editingly - 0.0.1'
-        return Builder.load_file('top_menu.kv')
-
-if __name__ == '__main__':
-    MyApp().run()
+class TopMenu(BoxLayout):
+    def __init__(self, **kwargs: object) -> object:
+        Builder.load_file('top_menu.kv')
+        super(TopMenu, self).__init__(**kwargs)
+        self.orientation = 'vertical'
