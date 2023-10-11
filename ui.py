@@ -4,6 +4,7 @@ from kivy.core.window import Window
 from waveform_panel import Waveform
 from top_menu import TopMenu
 from sidepanel import SidePanel
+from table import InteractiveTable
 from kivy.uix.floatlayout import FloatLayout
 class MainApp(App):
     def build(self):
@@ -14,6 +15,7 @@ class MainApp(App):
         layout.add_widget(Waveform())
         layout.add_widget(TopMenu())
         layout.add_widget(SidePanel())
+        layout.add_widget(InteractiveTable())
         return layout
 
 if __name__ == '__main__':

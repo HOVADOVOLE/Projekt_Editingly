@@ -1,11 +1,13 @@
-from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 
-class InteractiveTableApp(App):
-    def build(self):
+class InteractiveTable(BoxLayout):
+    def __init__(self, **kwargs):
+        super(InteractiveTable, self).__init__(**kwargs)
+        self.orientation = 'vertical'
+
         # Vytvoření hlavního layoutu
         layout = BoxLayout(orientation='vertical')
 
@@ -25,8 +27,6 @@ class InteractiveTableApp(App):
             for j in range(3):  # 3 sloupce s daty (bez čísla řádku)
                 text_input = TextInput(multiline=False, size_hint=(0.3, None), height=40)
                 table_layout.add_widget(text_input)
-        layout.add_widget(table_layout)
-        return layout
 
-if __name__ == '__main__':
-    InteractiveTableApp().run()
+        layout.add_widget(table_layout)
+        self.add_widget(layout)
