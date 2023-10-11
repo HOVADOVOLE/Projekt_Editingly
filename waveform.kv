@@ -1,0 +1,73 @@
+<Waveform>:
+    size_hint: 1, 0.2
+    FloatLayout:
+        size_hint: 1, 1
+        # Komplet celý box
+        BoxLayout:
+            orientation: 'vertical'
+            #size_hint: 1, 1
+
+            GridLayout:
+                cols: 2
+                rows: 1
+                # Box s tlačítky
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint: None, 1
+                    width: self.parent.width * 0.15
+
+                    # Řádek s Labelem a inputem
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint: 1, None
+                        height: self.minimum_height
+
+                        Label:
+                            text: "Video position:"
+                            size_hint: 0.5, None
+                            height: self.texture_size[1]
+                            halign: 'right'
+
+                        TextInput:
+                            id: time_input
+                            size_hint: 0.5, None
+                            height: self.minimum_height
+                            hint_text: 'Enter time (HH:MM:SS:ms)'
+                            text: '00:00:00,000' # Defaultní hodnota
+                            multiline: False
+                            input_filter: lambda text, from_undo: text if from_undo else ("".join([c for c in text if c.isdigit() or c == ':']))
+
+                    # Řádek s tlačítky na posuv / zastavení
+                    GridLayout:
+                        cols: 3
+                        rows: 1
+                        size: self.parent.width, 0.5 * self.parent.height
+                        Button:
+                            size_hint: 0.25, 0.5
+                            text: "<<<"
+                            pos_hint: {"left": 1}
+                            on_release: root.move_slider_backward()  # Při kliknutí zavolá funkci move_slider_backward()
+                        Button:
+                            size_hint: 0.25, 0.5
+                            text: "||"
+                            pos_hint: {"center_x": 0.5}  # Adjusted position for center alignment
+                        Button:
+                            size_hint: 0.25, 0.5
+                            text: ">>>"
+                            pos_hint: {"right": 1}
+                            on_release: root.move_slider_forward()  # Při kliknutí zavolá funkci move_slider_forward()
+
+                # Box se sliderem a přípravou pro zvukovou formu
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint: 0.70, 1
+                    Button:
+                        text: "Interactive sound wave"
+                        pos_hint: {'center_x': 0.45}
+                        size_hint: 0.8, 0.7
+                    Slider:
+                        pos_hint: {'center_x': 0.45}
+                        min: 0
+                        max: 100
+                        id: brightnessControl
+                        size_hint: 0.8, 0.1

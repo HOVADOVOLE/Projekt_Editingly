@@ -1,14 +1,15 @@
 import kivy
-from kivy.uix.button import Button
 from kivy.app import App
-from kivy.lang import Builder
-import top_menu
+from kivy.core.window import Window
+from waveform_panel import Waveform
+from kivy.uix.floatlayout import FloatLayout
 
 class MainApp(App):
     def build(self):
-        return Builder.load_file('ui.kv') # TODO nefunguje
-        #return Builder.load_file('top_menu.kv')
-        #return top_menu.MyApp()
-    
-app = MainApp()
-app.run()
+        Window.maximize()
+        layout = FloatLayout()
+        layout.add_widget(Waveform())
+        return layout
+
+if __name__ == '__main__':
+    MainApp().run()
