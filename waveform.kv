@@ -1,5 +1,5 @@
 <Waveform>:
-    size_hint: 1, 0.2
+    size_hint: 1, 0.3
     FloatLayout:
         size_hint: 1, 1
         # Komplet celý box
@@ -64,9 +64,9 @@
                     Button:
                         text: "Interactive sound wave"
                         pos_hint: {'center_x': 0.45}
-                        size_hint: 0.8, 0.7
+                        size_hint: 0.8, 0.5
                     Slider:
-                        pos_hint: {'center_x': 0.45}
+                        pos_hint: {'center_x': 0.45, 'bottom': 0.8}
                         min: 0
                         max: 100
                         id: brightnessControl

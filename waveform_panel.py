@@ -4,7 +4,6 @@ from kivy.uix.boxlayout import BoxLayout
 
 class Waveform(BoxLayout):
     def __init__(self, **kwargs: object) -> object:
-
         Builder.load_file('waveform.kv')
         super(Waveform, self).__init__(**kwargs)
         self.orientation = 'vertical'

@@ -20,8 +20,8 @@ class MainApp(App):
 
         layout.add_widget(Waveform())
         layout.add_widget(SidePanel())
-        layout.add_widget(TopMenu())
         layout.add_widget(InteractiveTable())
+        layout.add_widget(TopMenu())
 
         return layout
 
