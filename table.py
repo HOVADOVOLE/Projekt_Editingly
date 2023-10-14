@@ -7,7 +7,7 @@ class InteractiveTable(BoxLayout):
     def __init__(self, **kwargs):
         super(InteractiveTable, self).__init__(**kwargs)
         self.orientation = 'vertical'
-        self.size_hint = (1, 1)
+        self.size_hint = (0.75, 1)
         self.pos_hint = {'top': 0.95, 'left': 1}
         # Vytvoření hlavního layoutu
         layout = BoxLayout(orientation='vertical', size_hint=(1, 1))
