@@ -2,7 +2,7 @@
     orientation: 'vertical'
     canvas.before:
         Color:
-            rgba: 0.494, 0.494, 0.494, 1  # Barva pozadí #7e7e7e
+            rgba: 0.494, 0.494, 0.494, 1
         Rectangle:
             pos: self.pos
             size: self.size
@@ -10,7 +10,6 @@
         id: New
         orientation: 'vertical'
         size_hint: 1, 1
-        padding: 10
 
         GridLayout:
             cols: 1
@@ -26,161 +25,213 @@
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
-                height: 50
+                height: 70
                 spacing: 5
-
+                canvas.before:
+                    Color:
+                        rgba: 0.129, 0.129, 0.129, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
                 Image:
                     source: 'images/icons/add.png'
                     size_hint: None, None
-                    size: 50, 50
+                    size: 70, 70
 
-                Button:
+                Label:
                     text: "New Project"
                     size_hint: None, None
-                    text_size: 140, 50
+                    text_size: 140, 70
                     halign: 'right'
                     valign: 'middle'
-                    width: 160
-                    height: 50
+                    width: 140
+                    height: 70
 
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
-                height: 50
+                height: 70
                 spacing: 5
 
+                canvas.before:
+                    Color:
+                        rgba: 0.129, 0.129, 0.129, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
                 Image:
                     source: 'images/icons/open.png'
                     size_hint: None, None
-                    size: 50, 50
+                    size: 70, 70
 
-                Button:
+                Label:
                     text: "Load Project"
                     size_hint: None, None
                     text_size: 140, 50
                     halign: 'right'
                     valign: 'middle'
                     width: 140
-                    height: 50
+                    height: 70
                     pos_hint: {"top": 1}
 
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
-                height: 50
+                height: 70
                 spacing: 5
 
+                canvas.before:
+                    Color:
+                        rgba: 0.129, 0.129, 0.129, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
                 Image:
                     source: 'images/icons/save.png'
                     size_hint: None, None
-                    size: 50, 50
+                    size: 70, 70
 
-                Button:
+                Label:
                     text: "Save"
                     size_hint: None, None
                     text_size: 140, 50
                     halign: 'right'
                     valign: 'middle'
-                    width: 160
-                    height: 50
+                    width: 140
+                    height: 70
 
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
-                height: 50
+                height: 70
                 spacing: 5
+
+                canvas.before:
+                    Color:
+                        rgba: 0.129, 0.129, 0.129, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
 
                 Image:
                     source: 'images/icons/robot.png'
                     size_hint: None, None
-                    size: 50, 50
+                    size: 70, 70
 
-                Button:
+                Label:
                     text: "Generate Subtitles"
                     size_hint: None, None
                     text_size: 140, 50
                     halign: 'right'
                     valign: 'middle'
-                    width: 160
-                    height: 50
+                    width: 140
+                    height: 70
 
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
-                height: 50
+                height: 70
                 spacing: 5
+
+                canvas.before:
+                    Color:
+                        rgba: 0.129, 0.129, 0.129, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
 
                 Image:
                     source: 'images/icons/table.png'
                     size_hint: None, None
-                    size: 50, 50
+                    size: 70, 70
 
-                Button:
+                Label:
                     text: "Hide Table"
                     size_hint: None, None
                     text_size: 140, 50
                     halign: 'right'
                     valign: 'middle'
-                    width: 160
-                    height: 50
+                    width: 140
+                    height: 70
 
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
-                height: 50
+                height: 70
                 spacing: 5
+
+                canvas.before:
+                    Color:
+                        rgba: 0.129, 0.129, 0.129, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
 
                 Image:
                     source: 'images/icons/video.png'
                     size_hint: None, None
-                    size: 50, 50
+                    size: 70, 70
 
-                Button:
+                Label:
                     text: "Hide Video"
                     size_hint: None, None
                     text_size: 140, 50
                     halign: 'right'
                     valign: 'middle'
-                    width: 160
-                    height: 50
+                    width: 140
+                    height: 70
 
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
-                height: 50
+                height: 70
                 spacing: 5
+
+                canvas.before:
+                    Color:
+                        rgba: 0.129, 0.129, 0.129, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
 
                 Image:
                     source: 'images/icons/sound-wave.png'
                     size_hint: None, None
-                    size: 50, 50
+                    size: 70, 70
 
-                Button:
+                Label:
                     text: "Hide sound wave"
                     size_hint: None, None
                     text_size: 140, 50
                     halign: 'right'
                     valign: 'middle'
-                    width: 160
-                    height: 50
+                    width: 140
+                    height: 70
 
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint: 1, None
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, None
+            height: 70
+            spacing: 5
+            pos_hint: {"bottom": 0}
+
+            canvas.before:
+                Color:
+                    rgba: 0.129, 0.129, 0.129, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Image:
+                source: 'images/icons/help.png'
+                size_hint: None, None
+                size: 70, 70
+
+            Label:
+                text: "Help"
+                size_hint: None, None
+                text_size: 140, 50
+                halign: 'right'
+                valign: 'middle'
+                width: 140
                 height: 50
-                spacing: 5
-                pos_hint: {"bottom": 0}
-
-                Image:
-                    source: 'images/icons/help.png'
-                    size_hint: None, None
-                    size: 50, 50
-
-                Button:
-                    text: "Help"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 160
-                    height: 50
