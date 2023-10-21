@@ -6,20 +6,20 @@
         Rectangle:
             pos: self.pos
             size: self.size
+
     BoxLayout:
+        pos_hint: {"bottom": 1}
         id: New
         orientation: 'vertical'
-        size_hint: 1, 1
-
         GridLayout:
             cols: 1
-            size_hint: 1, 1
             spacing: 0
 
             Button:
                 background_normal: 'images/icons/kebab.png'
                 size_hint: None, None
                 size: 50, 50
+                pos_hint: {"top": 0.7}
                 on_release: root.toggle_panel()
 
             BoxLayout:

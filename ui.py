@@ -7,38 +7,33 @@ from sidepanel import SidePanel
 from table import InteractiveTable
 from videoplayer import VideoPlayerApp
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.boxlayout import BoxLayout
+
+
 
 class MainApp(App):
     def build(self):
         self.title = 'Editingly - 0.0.1'
 
-        # Základní nastavení okna
+        # Základní nastavení okay
         Window.maximize()
         Window.minimum_width = 1280
         Window.minimum_height = 720
         Window.clearcolor = (0.2, 0.2, 0.2, 1)
 
         # Vytvoření hlavního layoutu
-        uiBox = FloatLayout()
-        wholeGrid = GridLayout(cols=1, rows=2)
-        panel = BoxLayout(orientation="horizontal", size_hint=(1, 0.031))
-        panel.add_widget(TopMenu())
+        ui_box = FloatLayout()
+        grid = GridLayout(cols=2, rows=1)
 
-        bottomGrid = GridLayout(cols=2, rows=2)
         left = FloatLayout()
-
         left.add_widget(Waveform())
         left.add_widget(InteractiveTable())
         left.add_widget(VideoPlayerApp())
+        grid.add_widget(left)
+        grid.add_widget(SidePanel())
+        ui_box.add_widget(grid)
+        ui_box.add_widget(TopMenu())
+        return ui_box
 
-        bottomGrid.add_widget(left)
-        bottomGrid.add_widget(SidePanel())
-
-        wholeGrid.add_widget(panel)
-        wholeGrid.add_widget(bottomGrid)
-        uiBox.add_widget(wholeGrid)
-        return uiBox
 
 if __name__ == '__main__':
     MainApp().run()
