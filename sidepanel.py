@@ -262,7 +262,7 @@ class SidePanel(Widget):
 class SidePanel(BoxLayout):
     def __init__(self, **kwargs):
         self.size_hint = (None, 0.97)
-        self.width = 60
+        self.width = 90
         self.pos_hint = {"right": 1, "bottom": 1}
 
         Builder.load_file('sidepanel.kv')
@@ -281,6 +281,6 @@ class SidePanel(BoxLayout):
         self.visible = True
 
     def hide(self):
-        anim = Animation(width=60, duration=0.15)
+        anim = Animation(width=90, duration=0.15)
         anim.start(self)
         self.visible = False
