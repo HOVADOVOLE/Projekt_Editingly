@@ -9,7 +9,6 @@
 
     BoxLayout:
         pos_hint: {"bottom": 1}
-        id: New
         orientation: 'vertical'
         BoxLayout:
             size_hint: 1, 0.04
@@ -22,265 +21,278 @@
                 size: 50, 50
                 on_release: root.toggle_panel()
 
-            BoxLayout:
+            RelativeLayout:
+                id: new_project
                 orientation: 'horizontal'
                 size_hint: 1, None
                 height: 70
                 spacing: 5
-                canvas.before:
-                    Color:
-                        rgba: 0.129, 0.129, 0.129, 1
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-                Image:
-                    source: 'images/icons/add.png'
+                Button:
                     size_hint: None, None
-                    size: 70, 70
-                    canvas.before:
-                        Color:
-                            rgba: 0.929, 0.929, 0.929, 1
-                        Ellipse:
-                            pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
-                            size: self.width * 0.9, self.height * 0.9
-
-                Label:
-                    text: "New Project"
-                    size_hint: None, None
-                    text_size: 140, 70
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 140
                     height: 70
+                    width: 260
+                    background_normal: ''
+                    background_color: 0.129, 0.129, 0.129, 1
+                    on_release: root.new_project()
 
-            BoxLayout:
-                orientation: 'horizontal'
-                size_hint: 1, None
-                height: 70
-                spacing: 5
+                    GridLayout:
+                        cols: 2
+                        spacing: 0
+                        size_hint: 1, None
+                        height: 70
 
-                canvas.before:
-                    Color:
-                        rgba: 0.129, 0.129, 0.129, 1
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-                Image:
-                    source: 'images/icons/open.png'
-                    size_hint: None, None
-                    size: 70, 70
-                    canvas.before:
-                        Color:
-                            rgba: 0.929, 0.929, 0.929, 1
-                        Ellipse:
-                            pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
-                            size: self.width * 0.9, self.height * 0.9
+                        Image:
+                            source: 'images/icons/add.png'
+                            size_hint: None, None
+                            pos_hint: {None, None}
+                            pos: self.pos
+                            size: 70, 70
+                            canvas.before:
+                                Color:
+                                    rgba: 0.929, 0.929, 0.929, 1
+                                Ellipse:
+                                    pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
+                                    size: self.width * 0.9, self.height * 0.9
+                        Label:
+                            text: "New Project"
+                            size_hint: None, None
+                            size: 260, 70
 
-                Label:
-                    text: "Load Project"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 140
-                    height: 70
-                    pos_hint: {"top": 1}
 
-            BoxLayout:
+            RelativeLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
                 height: 70
                 spacing: 5
 
-                canvas.before:
-                    Color:
-                        rgba: 0.129, 0.129, 0.129, 1
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-                Image:
-                    source: 'images/icons/save.png'
+                Button:
                     size_hint: None, None
-                    size: 70, 70
-                    canvas.before:
-                        Color:
-                            rgba: 0.929, 0.929, 0.929, 1
-                        Ellipse:
-                            pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
-                            size: self.width * 0.9, self.height * 0.9
-
-                Label:
-                    text: "Save"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 140
                     height: 70
+                    width: 260
+                    background_normal: ''
+                    background_color: 0.129, 0.129, 0.129, 1
+                    on_release: root.open_project()
+                    GridLayout:
+                        cols: 2
+                        spacing: 0
+                        size_hint: 1, None
+                        height: 70
+                        Image:
+                            source: 'images/icons/open.png'
+                            size_hint: None, None
+                            size: 70, 70
+                            canvas.before:
+                                Color:
+                                    rgba: 0.929, 0.929, 0.929, 1
+                                Ellipse:
+                                    pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
+                                    size: self.width * 0.9, self.height * 0.9
+                        Label:
+                            text: "Open Project"
+                            size_hint: None, None
+                            size: 250, 70
 
-            BoxLayout:
+            RelativeLayout:
+                id: Save
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: 70
+                spacing: 5
+                Button:
+                    size_hint: None, None
+                    height: 70
+                    width: 260
+                    background_normal: ''
+                    background_color: 0.129, 0.129, 0.129, 1
+                    on_release: root.save_project()
+                    GridLayout:
+                        cols: 2
+                        spacing: 0
+                        size_hint: 1, None
+                        height: 70
+                        Image:
+                            source: 'images/icons/save.png'
+                            size_hint: None, None
+                            size: 70, 70
+                            canvas.before:
+                                Color:
+                                    rgba: 0.929, 0.929, 0.929, 1
+                                Ellipse:
+                                    pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
+                                    size: self.width * 0.9, self.height * 0.9
+                        Label:
+                            text: "Save Project"
+                            size_hint: None, None
+                            size: 250, 70
+
+            RelativeLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
                 height: 70
                 spacing: 5
 
-                canvas.before:
-                    Color:
-                        rgba: 0.129, 0.129, 0.129, 1
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-
-                Image:
-                    source: 'images/icons/robot.png'
+                Button:
                     size_hint: None, None
-                    size: 70, 70
-                    canvas.before:
-                        Color:
-                            rgba: 0.929, 0.929, 0.929, 1
-                        Ellipse:
-                            pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
-                            size: self.width * 0.9, self.height * 0.9
-
-                Label:
-                    text: "Generate Subtitles"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 140
                     height: 70
+                    width: 260
+                    background_normal: ''
+                    background_color: 0.129, 0.129, 0.129, 1
+                    on_release: root.generate_subtitles()
+                    GridLayout:
+                        cols: 2
+                        spacing: 0
+                        size_hint: 1, None
+                        height: 70
+                        Image:
+                            source: 'images/icons/robot.png'
+                            size_hint: None, None
+                            size: 70, 70
+                            canvas.before:
+                                Color:
+                                    rgba: 0.929, 0.929, 0.929, 1
+                                Ellipse:
+                                    pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
+                                    size: self.width * 0.9, self.height * 0.9
+                        Label:
+                            text: "Generate Subtitles"
+                            size_hint: None, None
+                            size: 210, 70
 
-            BoxLayout:
+            RelativeLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
                 height: 70
                 spacing: 5
 
-                canvas.before:
-                    Color:
-                        rgba: 0.129, 0.129, 0.129, 1
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-
-                Image:
-                    source: 'images/icons/table.png'
+                Button:
                     size_hint: None, None
-                    size: 70, 70
-                    canvas.before:
-                        Color:
-                            rgba: 0.929, 0.929, 0.929, 1
-                        Ellipse:
-                            pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
-                            size: self.width * 0.9, self.height * 0.9
-
-                Label:
-                    text: "Hide Table"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 140
                     height: 70
+                    width: 260
+                    background_normal: ''
+                    background_color: 0.129, 0.129, 0.129, 1
+                    on_release: root.toggle_table()
 
-            BoxLayout:
+                    GridLayout:
+                        cols: 2
+                        spacing: 0
+                        size_hint: 1, None
+                        height: 70
+
+                        Image:
+                            source: 'images/icons/table.png'
+                            size_hint: None, None
+                            size: 70, 70
+                            canvas.before:
+                                Color:
+                                    rgba: 0.929, 0.929, 0.929, 1
+                                Ellipse:
+                                    pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
+                                    size: self.width * 0.9, self.height * 0.9
+                        Label:
+                            text: "Show Table"
+                            size_hint: None, None
+                            size: 260, 70
+
+            RelativeLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
                 height: 70
                 spacing: 5
 
-                canvas.before:
-                    Color:
-                        rgba: 0.129, 0.129, 0.129, 1
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-
-                Image:
-                    source: 'images/icons/video.png'
+                Button:
                     size_hint: None, None
-                    size: 70, 70
-                    canvas.before:
-                        Color:
-                            rgba: 0.929, 0.929, 0.929, 1
-                        Ellipse:
-                            pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
-                            size: self.width * 0.9, self.height * 0.9
-
-                Label:
-                    text: "Hide Video"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 140
                     height: 70
+                    width: 260
+                    background_normal: ''
+                    background_color: 0.129, 0.129, 0.129, 1
+                    on_release: root.toggle_video()
 
-            BoxLayout:
+                    GridLayout:
+                        cols: 2
+                        spacing: 0
+                        size_hint: 1, None
+                        height: 70
+
+                        Image:
+                            source: 'images/icons/video.png'
+                            size_hint: None, None
+                            size: 70, 70
+                            canvas.before:
+                                Color:
+                                    rgba: 0.929, 0.929, 0.929, 1
+                                Ellipse:
+                                    pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
+                                    size: self.width * 0.9, self.height * 0.9
+                        Label:
+                            text: "Show Video"
+                            size_hint: None, None
+                            size: 260, 70
+
+            RelativeLayout:
                 orientation: 'horizontal'
                 size_hint: 1, None
                 height: 70
                 spacing: 5
 
-                canvas.before:
-                    Color:
-                        rgba: 0.129, 0.129, 0.129, 1
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-
-                Image:
-                    source: 'images/icons/sound-wave.png'
+                Button:
                     size_hint: None, None
-                    size: 70, 70
-                    canvas.before:
-                        Color:
-                            rgba: 0.929, 0.929, 0.929, 1
-                        Ellipse:
-                            pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
-                            size: self.width * 0.9, self.height * 0.9
-
-                Label:
-                    text: "Hide sound wave"
-                    size_hint: None, None
-                    text_size: 140, 50
-                    halign: 'right'
-                    valign: 'middle'
-                    width: 140
                     height: 70
+                    width: 260
+                    background_normal: ''
+                    background_color: 0.129, 0.129, 0.129, 1
+                    on_release: root.toggle_waveform()
+                    GridLayout:
+                        cols: 2
+                        spacing: 0
+                        size_hint: 1, None
+                        height: 70
 
-        BoxLayout:
+                        Image:
+                            source: 'images/icons/sound-wave.png'
+                            size_hint: None, None
+                            size: 70, 70
+                            canvas.before:
+                                Color:
+                                    rgba: 0.929, 0.929, 0.929, 1
+                                Ellipse:
+                                    pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
+                                    size: self.width * 0.9, self.height * 0.9
+                        Label:
+                            text: "Show Waveform"
+                            size_hint: None, None
+                            size: 225, 70
+
+        RelativeLayout:
             orientation: 'horizontal'
             size_hint: 1, None
             height: 70
             spacing: 5
             pos_hint: {"bottom": 0}
 
-            canvas.before:
-                Color:
-                    rgba: 0.129, 0.129, 0.129, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-
-            Image:
-                source: 'images/icons/help.png'
+            Button:
                 size_hint: None, None
-                size: 70, 70
-                canvas.before:
-                    Color:
-                        rgba: 0.929, 0.929, 0.929, 1
-                    Ellipse:
-                        pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
-                        size: self.width * 0.9, self.height * 0.9
-
-            Label:
-                text: "Help"
-                size_hint: None, None
-                text_size: 140, 70
-                halign: 'right'
-                pos_hint: {"center_y": 0.5}
-                valign: 'middle'
-                width: 140
-                height: 50
+                height: 70
+                width: 260
+                background_normal: ''
+                background_color: 0.129, 0.129, 0.129, 1
+                on_release: root.help()
+                GridLayout:
+                    cols: 2
+                    spacing: 0
+                    size_hint: 1, None
+                    height: 70
+                    Image:
+                        source: 'images/icons/help.png'
+                        size_hint: None, None
+                        size: 70, 70
+                        canvas.before:
+                            Color:
+                                rgba: 0.929, 0.929, 0.929, 1
+                            Ellipse:
+                                pos: (self.center_x - self.width * 0.45, self.center_y - self.height * 0.45)
+                                size: self.width * 0.9, self.height * 0.9
+                    Label:
+                        text: "Help"
+                        size_hint: None, None
+                        halign: 'right'
+                        size: 320, 70

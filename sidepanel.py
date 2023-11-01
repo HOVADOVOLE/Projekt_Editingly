@@ -18,6 +18,7 @@ from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.graphics import *
 from kivy.core.window import Window
+from kivy.app import App
 
 class SidePanel(Widget):
     '''A panel widget that attach to a side of the screen
@@ -268,15 +269,8 @@ class SidePanel(BoxLayout):
         Builder.load_file('sidepanel.kv')
         super().__init__(**kwargs)
         self.visible = False
-
-    def toggle_panel(self):
-        if self.visible:
-            self.hide()
-        else:
-            self.show()
-
     def show(self):
-        anim = Animation(width=225, duration=0.15)
+        anim = Animation(width=260, duration=0.15)
         anim.start(self)
         self.visible = True
 
@@ -284,3 +278,27 @@ class SidePanel(BoxLayout):
         anim = Animation(width=90, duration=0.15)
         anim.start(self)
         self.visible = False
+
+    # Funkce na tlačítkách
+    def toggle_panel(self):
+        if self.visible:
+            self.hide()
+        else:
+            self.show()
+
+    def new_project(self):
+        print("New project")
+    def open_project(self):
+        print("Open project")
+    def save_project(self):
+        print("Save project")
+    def generate_subtitles(self):
+        print("Generate subtitles")
+    def toggle_table(self):
+        print("Toggle table")
+    def toggle_video(self):
+        print("Toggle video")
+    def toggle_waveform(self):
+        print("Toggle waveform")
+    def help(self):
+        print("Help")

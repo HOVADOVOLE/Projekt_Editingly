@@ -12,28 +12,30 @@ from kivy.uix.gridlayout import GridLayout
 
 class MainApp(App):
     def build(self):
-        self.title = 'Editingly - 0.0.1'
-
+        self.title = 'Editingly - 0.0.2'
         # Základní nastavení okay
         Window.maximize()
         Window.minimum_width = 1280
         Window.minimum_height = 720
         Window.clearcolor = (0.2, 0.2, 0.2, 1)
 
+        waveform = Waveform()
+        table = InteractiveTable()
+        video = VideoPlayerApp()
         # Vytvoření hlavního layoutu
-        ui_box = FloatLayout()
+        ui_box = FloatLayout(size_hint=(1, 1), pos_hint={'top': 1, 'left': 1})
         grid = GridLayout(cols=2, rows=1)
 
         left = FloatLayout()
-        left.add_widget(Waveform())
-        left.add_widget(InteractiveTable())
-        left.add_widget(VideoPlayerApp())
+        left.add_widget(waveform)
+        left.add_widget(table)
+        left.add_widget(video)
         grid.add_widget(left)
         grid.add_widget(SidePanel())
         ui_box.add_widget(grid)
         ui_box.add_widget(TopMenu())
-        return ui_box
 
+        return ui_box
 
 if __name__ == '__main__':
     MainApp().run()
