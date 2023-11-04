@@ -19,6 +19,9 @@ from kivy.uix.image import Image
 from kivy.graphics import *
 from kivy.core.window import Window
 from kivy.app import App
+from waveform_panel import Waveform
+from videoplayer import VideoPlayerApp
+from table import InteractiveTable
 
 class SidePanel(Widget):
     '''A panel widget that attach to a side of the screen
@@ -261,14 +264,32 @@ class SidePanel(Widget):
         return super(SidePanel, self).on_touch_up(touch)
 
 class SidePanel(BoxLayout):
-    def __init__(self, **kwargs):
+    def __init__(self, left_layout, **kwargs):
+        Builder.load_file('sidepanel.kv')
+        super().__init__(**kwargs)
+
+        self.left_layout = left_layout
         self.size_hint = (None, 0.97)
         self.width = 90
         self.pos_hint = {"right": 1, "bottom": 1}
 
-        Builder.load_file('sidepanel.kv')
-        super().__init__(**kwargs)
-        self.visible = False
+        self.visible = False # určuje, jestli je sidepanel otevřený, a nebo zavřený
+
+        # Funkcionalita pro zobrazení waveform panelu
+        self.waveform_visible = True
+        self.waveform_instance = Waveform()
+        self.left_layout.add_widget(self.waveform_instance)
+
+        # Funkcionalita pro zobrazení video přehrávače
+        self.videoplayer_visible = True
+        self.videoplayer_instance = VideoPlayerApp()
+        self.left_layout.add_widget(self.videoplayer_instance)
+
+        # Funkcionalita pro zobrazení tabulky
+        self.table_visible = True
+        self.table_instance = InteractiveTable()
+        self.left_layout.add_widget(self.table_instance)
+
     def show(self):
         anim = Animation(width=260, duration=0.15)
         anim.start(self)
@@ -295,10 +316,32 @@ class SidePanel(BoxLayout):
     def generate_subtitles(self):
         print("Generate subtitles")
     def toggle_table(self):
-        print("Toggle table")
+        if self.table_visible:
+            self.left_layout.remove_widget(self.table_instance)
+            self.table_instance = None
+            self.table_visible = False
+        else:
+            self.table_instance = InteractiveTable()
+            self.left_layout.add_widget(self.table_instance)
+            self.table_visible = True
     def toggle_video(self):
-        print("Toggle video")
+        if self.videoplayer_visible:
+            self.left_layout.remove_widget(self.videoplayer_instance)
+            self.videoplayer_instance = None
+            self.videoplayer_visible = False
+        else:
+            self.videoplayer_instance = VideoPlayerApp()
+            self.left_layout.add_widget(self.videoplayer_instance)
+            self.videoplayer_visible = True
     def toggle_waveform(self):
-        print("Toggle waveform")
+        if self.waveform_visible:
+            self.left_layout.remove_widget(self.waveform_instance)
+            self.waveform_instance = None
+            self.waveform_visible = False
+        else:
+            self.waveform_instance = Waveform()
+            self.left_layout.add_widget(self.waveform_instance)
+            self.waveform_visible = True
+
     def help(self):
         print("Help")
