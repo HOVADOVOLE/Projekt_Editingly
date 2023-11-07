@@ -2,14 +2,17 @@ from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.popup import Popup
+from kivy.graphics import Line, Rectangle, Color, ClearColor
+from pydub import AudioSegment
+import numpy as np
+
+Builder.load_file('waveform.kv')
 
 class Waveform(BoxLayout):
-    def __init__(self, **kwargs: object) -> object:
-        self.size_hint = (1, 0.3)
-        Builder.load_file('waveform.kv')
+    def __init__(self, **kwargs):
         super(Waveform, self).__init__(**kwargs)
-        self.orientation = 'vertical'
-
+        self.points = []
+        self.audio_source = None
         self.popup_file_manager = None
 
     def move_slider_backward(self):
@@ -19,6 +22,7 @@ class Waveform(BoxLayout):
     def move_slider_forward(self):
         if self.ids.brightnessControl.value < self.ids.brightnessControl.max:
             self.ids.brightnessControl.value += 0.05 * (self.ids.brightnessControl.max - self.ids.brightnessControl.min)
+
     def choose_file(self):
         self.open_file_manager()
 
@@ -31,14 +35,28 @@ class Waveform(BoxLayout):
 
     def select_file(self, instance, selection, *args):
         if selection:
-            #self.video.source = selection[0]
-            print(selection[0])
+            self.audio_source = AudioSegment.from_file(selection[0])
             self.popup_file_manager.dismiss()
+            self.create_wave()
 
     def close_file_manager(self, instance):
         self.popup_file_manager.dismiss()
 
-    def on_video_loaded(self, instance, value):
-        #self.video_loaded = True
-        self.unbind(on_touch_up=self.on_touch_up)
-        self.update_slider_position(self.video.position, self.video.duration)
+    def create_wave(self):
+        self.points = []
+        self.canvas.clear()
+
+        if self.audio_source:
+            samples = np.array(self.audio_source.get_array_of_samples())
+            num_samples = len(samples)
+            step = int(num_samples / self.width)
+            for i in range(0, num_samples, step):
+                y = self.height / 2 + (samples[i] / 32768) * self.height / 3  # Přizpůsobeno rozsahu vzorků
+                x = self.ids.waveform_button.x + i * self.ids.waveform_button.width / num_samples
+
+                self.points.extend([x, y]) # Původně místo x: i * self.width / num_samples
+
+            with self.canvas.before:
+                Color(1, 1, 1, 1) # Barva čáry
+                Line(points=self.points, close=False, pos=self.ids.waveform_button.pos, )
+            self.ids.slider_box.remove_widget(self.ids.waveform_button)

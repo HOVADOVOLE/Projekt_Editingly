@@ -61,9 +61,11 @@
 
                 # Box se sliderem a přípravou pro zvukovou formu
                 BoxLayout:
+                    id: slider_box
                     orientation: 'vertical'
                     size_hint: 0.70, 1
                     Button:
+                        id: waveform_button
                         text: "Interactive sound wave"
                         pos_hint: {'center_x': 0.45}
                         size_hint: 0.8, 0.5

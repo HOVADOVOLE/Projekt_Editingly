@@ -11,8 +11,6 @@ class InteractiveTable(RelativeLayout):
         self.orientation = 'vertical'
         self.size_hint = (0.75, 1)
         self.pos_hint = {'top': 0.95, 'left': 1}
-        self.canvas.before.add(Color(0.2, 0.2, 0.2, 1))
-        self.canvas.before.add(Rectangle(pos=self.pos, size=self.size))
         # Vytvoření hlavního layoutu
         layout = BoxLayout(orientation='vertical', size_hint=(1, 1))
 
