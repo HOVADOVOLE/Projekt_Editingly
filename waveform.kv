@@ -64,14 +64,19 @@
                     id: slider_box
                     orientation: 'vertical'
                     size_hint: 0.70, 1
-                    Button:
-                        id: waveform_button
-                        text: "Interactive sound wave"
-                        pos_hint: {'center_x': 0.45}
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        id: canvas_box
                         size_hint: 0.8, 0.5
-                        on_release: root.choose_file() # Prozatimně do dalšího měsíce
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        Button:
+                            id: waveform_button
+                            text: "Interactive sound wave"
+                            size_hint: 1, 1
+                            on_release: root.choose_file()
                     Slider:
-                        pos_hint: {'center_x': 0.45, 'bottom': 0.8}
+                        pos_hint: {'center_x': 0.5, 'bottom': 0.8}
                         min: 0
                         max: 100
                         id: brightnessControl
