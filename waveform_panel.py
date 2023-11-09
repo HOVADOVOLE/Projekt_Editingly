@@ -5,6 +5,7 @@ from kivy.uix.popup import Popup
 from kivy.graphics import Line, Color
 from pydub import AudioSegment
 import numpy as np
+from kivy.core.window import Window
 
 
 Builder.load_file('waveform.kv')
@@ -28,7 +29,7 @@ class Waveform(BoxLayout):
         self.open_file_manager()
 
     def open_file_manager(self):
-        file_chooser = FileChooserIconView(path='./', filters=['*.mp3', '*.wav', '*.ogg'])
+        file_chooser = FileChooserIconView(path='./', filters=['*.mp3', '*.wav', '*.ogg', '*.mp4', '*.avi', '*.mkv', '*.mov', '*.wmv'])
         file_chooser.bind(on_submit=self.select_file)
         file_chooser.bind(on_cancel=self.close_file_manager)
         self.popup_file_manager = Popup(title='Choose file', content=file_chooser, size_hint=(0.9, 0.9))
@@ -42,7 +43,8 @@ class Waveform(BoxLayout):
 
     def close_file_manager(self, instance):
         self.popup_file_manager.dismiss()
-
+    def update_wave_size(self, *args):
+        self.ids.canvas_box.canvas.before.size = self.ids.canvas_box.size
     def create_wave(self):
         self.points = []
 
@@ -58,6 +60,8 @@ class Waveform(BoxLayout):
 
             with self.ids.canvas_box.canvas.before:
                 Color(1,1,1,1)
-                Line(points=self.points, close=False, pos=self.ids.waveform_button.pos, width=1, size_hint=(0.5, 1))
+                Line(points=self.points, close=False, pos=(100, 100), width=1)
 
             self.ids.canvas_box.remove_widget(self.ids.waveform_button)
+
+            Window.bind(on_resize=self.update_wave_size)

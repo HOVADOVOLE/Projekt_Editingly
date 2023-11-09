@@ -65,15 +65,22 @@
                     orientation: 'vertical'
                     size_hint: 0.70, 1
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    BoxLayout:
+                    RelativeLayout:
                         orientation: 'horizontal'
                         id: canvas_box
                         size_hint: 0.8, 0.5
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        canvas.before:
+
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                rectangle: 0, 0, self.width, self.height
+                                width: 2
+
                         Button:
                             id: waveform_button
                             text: "Interactive sound wave"
-                            size_hint: 1, 1
                             on_release: root.choose_file()
                     Slider:
                         pos_hint: {'center_x': 0.5, 'bottom': 0.8}
