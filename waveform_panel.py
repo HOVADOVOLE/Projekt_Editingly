@@ -16,6 +16,7 @@ class Waveform(BoxLayout):
         self.points = []
         self.audio_source = None
         self.popup_file_manager = None
+        self.samples = []
 
     def move_slider_backward(self):
         if self.ids.brightnessControl.value > self.ids.brightnessControl.min:
@@ -44,24 +45,44 @@ class Waveform(BoxLayout):
     def close_file_manager(self, instance):
         self.popup_file_manager.dismiss()
     def update_wave_size(self, *args):
-        self.ids.canvas_box.canvas.before.size = self.ids.canvas_box.size
+        num_samples = len(self.samples)
+        step = int(num_samples / self.width)
+        self.points = []
+
+        for i in range(0, num_samples, step):
+            y = self.height / 2 + (self.samples[i] / 32768) * self.height * 0.8
+            x = i * self.ids.canvas_box.width / num_samples
+
+            self.points.extend([x, y])
+
+        self.ids.canvas_box.canvas.clear()
+        with self.ids.canvas_box.canvas:
+            Color(1,1,1,1)
+            Line(points=self.points, close=False, width=1)
+            Color(0,0,0,1)
+            Line(rectangle=(0, 0, self.ids.canvas_box.width, self.ids.canvas_box.height), width=2)
+
     def create_wave(self):
         self.points = []
 
         if self.audio_source:
-            samples = np.array(self.audio_source.get_array_of_samples())
-            num_samples = len(samples)
+            self.samples = np.array(self.audio_source.get_array_of_samples())
+            num_samples = len(self.samples)
             step = int(num_samples / self.width)
+
             for i in range(0, num_samples, step):
-                y = self.height / 2 + (samples[i] / 32768) * self.height / 3
-                x = self.ids.waveform_button.x + i * self.ids.waveform_button.width / num_samples
+                y = self.height / 2 + (self.samples[i] / 32768) * self.height * 0.8
+                x = i * self.ids.canvas_box.width / num_samples
 
                 self.points.extend([x, y])
 
-            with self.ids.canvas_box.canvas.before:
+            with self.ids.canvas_box.canvas:
                 Color(1,1,1,1)
-                Line(points=self.points, close=False, pos=(100, 100), width=1)
+                Line(points=self.points, close=False, width=1)
 
             self.ids.canvas_box.remove_widget(self.ids.waveform_button)
 
-            Window.bind(on_resize=self.update_wave_size)
+            Window.bind(on_resize=self.update_wave_size) # zajišťuje responsivitu pro změnu velikosti okna
+            Window.bind(on_maximize=self.update_wave_size) # zajišťuje responsivitu pro maximalizaci okna
+            Window.bind(on_restore=self.update_wave_size) # zajišťuje responsivitu pro zmenšení okna
+            Window.bind(size=self.update_wave_size) # zajišťuje responsivitu pro přenos mezi monitory

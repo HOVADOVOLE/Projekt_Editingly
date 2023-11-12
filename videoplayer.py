@@ -13,7 +13,7 @@ class VideoPlayerApp(BoxLayout):
         self.padding = 10
         self.spacing = 10
 
-        with self.canvas.before:
+        with self.canvas:
             Color(0, 0, 0, 1)
             self.rect = Rectangle(pos=self.pos, size=self.size)
 
