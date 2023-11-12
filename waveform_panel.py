@@ -50,7 +50,7 @@ class Waveform(BoxLayout):
         self.points = []
 
         for i in range(0, num_samples, step):
-            y = self.height / 2 + (self.samples[i] / 32768) * self.height * 0.8
+            y = self.height / 2.5 + (self.samples[i] / 32768) * self.height * 0.8
             x = i * self.ids.canvas_box.width / num_samples
 
             self.points.extend([x, y])
@@ -59,6 +59,7 @@ class Waveform(BoxLayout):
         with self.ids.canvas_box.canvas:
             Color(1,1,1,1)
             Line(points=self.points, close=False, width=1)
+            
             Color(0,0,0,1)
             Line(rectangle=(0, 0, self.ids.canvas_box.width, self.ids.canvas_box.height), width=2)
 
@@ -71,7 +72,7 @@ class Waveform(BoxLayout):
             step = int(num_samples / self.width)
 
             for i in range(0, num_samples, step):
-                y = self.height / 2 + (self.samples[i] / 32768) * self.height * 0.8
+                y = self.height / 2.5 + (self.samples[i] / 32768) * self.height * 0.8
                 x = i * self.ids.canvas_box.width / num_samples
 
                 self.points.extend([x, y])
