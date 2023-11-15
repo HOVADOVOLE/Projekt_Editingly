@@ -19,7 +19,8 @@ class VideoPlayerApp(BoxLayout):
             Color(0, 0, 0, 1)
             self.rect = Rectangle(pos=self.pos, size=self.size)
 
-        self.video = VideoPlayer(size_hint=(1, 1), state='pause')
+        self.video = VideoPlayer(size_hint=(1, 1), state='pause', allow_fullscreen=False)
+        self.video.bind(position=self.update_slider_position)
         self.add_widget(self.video)
 
         self.bind(pos=self.update_rectangle, size=self.update_rectangle)
@@ -27,11 +28,14 @@ class VideoPlayerApp(BoxLayout):
 
         if self.file_handler.get_source() is not None:
             self.video.source = self.file_handler.get_source()
-            #self.update_slider_position(self.video.position, self.video.duration) # HACK nevím co dělá xd
+            #self.update_slider_position(self.video.position) # HACK nevím co dělá xd
         else:
             self.video.bind(on_loaded=self.on_video_loaded)
             self.video_loaded = False
-
+    def update_slider_position(self, instance, value):
+        self.file_handler.set_video_position(value)
+        self.file_handler.set_max_value(self.video.duration)
+        print("max v VP:", self.file_handler.get_max_value())
     def update_rectangle(self, instance, value):
         self.rect.pos = self.pos
         self.rect.size = self.size
@@ -50,7 +54,6 @@ class VideoPlayerApp(BoxLayout):
     def select_file(self, instance, selection, *args):
         if selection:
             self.video.source = selection[0]
-            print("Vybral:", selection[0])
             self.file_handler.set_source(selection[0])
             self.popup_file_manager.dismiss()
 
@@ -58,6 +61,7 @@ class VideoPlayerApp(BoxLayout):
         self.popup_file_manager.dismiss()
 
     def on_video_loaded(self, instance, value):
+        print("jsem tu")
         self.video_loaded = True
         self.unbind(on_touch_up=self.on_touch_up)
-        self.update_slider_position(self.video.position, self.video.duration)
+        self.update_slider_position(self.video.position)

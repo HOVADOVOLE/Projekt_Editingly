@@ -7,6 +7,7 @@ from pydub import AudioSegment
 import numpy as np
 from kivy.core.window import Window
 from file_handler import file_handler
+from kivy.clock import Clock
 
 Builder.load_file('waveform.kv')
 
@@ -19,6 +20,8 @@ class Waveform(BoxLayout):
         self.audio_source = None
         self.popup_file_manager = None
         self.samples = []
+
+        Clock.schedule_interval(self.update_slider_position, 0.1)
 
         if self.file_handler.get_source() is not None:
             source = self.file_handler.get_source()
@@ -105,3 +108,13 @@ class Waveform(BoxLayout):
             Window.bind(on_restore=self.update_wave_size) # zajišťuje responsivitu pro zmenšení okna
             Window.bind(size=self.update_wave_size) # zajišťuje responsivitu pro přenos mezi monitory
             Window.bind(on_draw=self.update_wave_size) # zajišťuje responsivitu i když vypnu okno a pak ho zase zapnu
+    def update_slider_position(self, key, *larg):
+        #self.ids.brightnessControl.max = self.file_handler.get_max_value()
+        a = self.file_handler.get_max_value()
+        print(a)
+        self.ids.brightnessControl.max = a
+        #f a == 0 or a == 1:
+        #   self.ids.brightnessControl.max = a
+        #rint("max v wp:", self.ids.brightnessControl.max)
+        #print(self.ids.brightnessControl.max)
+        self.ids.brightnessControl.value = self.file_handler.get_video_position()
