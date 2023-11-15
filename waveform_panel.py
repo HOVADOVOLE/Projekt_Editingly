@@ -6,17 +6,24 @@ from kivy.graphics import Line, Color
 from pydub import AudioSegment
 import numpy as np
 from kivy.core.window import Window
-
+from file_handler import file_handler
 
 Builder.load_file('waveform.kv')
 
 class Waveform(BoxLayout):
     def __init__(self, **kwargs):
         super(Waveform, self).__init__(**kwargs)
+        self.file_handler = file_handler()
+
         self.points = []
         self.audio_source = None
         self.popup_file_manager = None
         self.samples = []
+
+        if self.file_handler.get_source() is not None:
+            source = self.file_handler.get_source()
+            self.audio_source = AudioSegment.from_file(source)
+            self.create_wave()
 
     def move_slider_backward(self):
         if self.ids.brightnessControl.value > self.ids.brightnessControl.min:
@@ -27,7 +34,12 @@ class Waveform(BoxLayout):
             self.ids.brightnessControl.value += 0.05 * (self.ids.brightnessControl.max - self.ids.brightnessControl.min)
 
     def choose_file(self):
-        self.open_file_manager()
+        if self.file_handler.get_source() is None:
+            self.open_file_manager()
+        else:
+            source = self.file_handler.get_source()
+            self.audio_source = AudioSegment.from_file(source)
+            self.create_wave()
 
     def open_file_manager(self):
         file_chooser = FileChooserIconView(path='./', filters=['*.mp3', '*.wav', '*.ogg', '*.mp4', '*.avi', '*.mkv', '*.mov', '*.wmv'])
@@ -38,6 +50,8 @@ class Waveform(BoxLayout):
 
     def select_file(self, instance, selection, *args):
         if selection:
+            self.file_handler.set_source(selection[0])
+
             self.audio_source = AudioSegment.from_file(selection[0])
             self.popup_file_manager.dismiss()
             self.create_wave()
@@ -81,9 +95,13 @@ class Waveform(BoxLayout):
                 Color(1,1,1,1)
                 Line(points=self.points, close=False, width=1)
 
-            self.ids.canvas_box.remove_widget(self.ids.waveform_button)
+            try:
+                self.ids.canvas_box.remove_widget(self.ids.waveform_button)
+            except:
+                print('Waveform button not found')
 
             Window.bind(on_resize=self.update_wave_size) # zajišťuje responsivitu pro změnu velikosti okna
             Window.bind(on_maximize=self.update_wave_size) # zajišťuje responsivitu pro maximalizaci okna
             Window.bind(on_restore=self.update_wave_size) # zajišťuje responsivitu pro zmenšení okna
             Window.bind(size=self.update_wave_size) # zajišťuje responsivitu pro přenos mezi monitory
+            Window.bind(on_draw=self.update_wave_size) # zajišťuje responsivitu i když vypnu okno a pak ho zase zapnu

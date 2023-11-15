@@ -3,10 +3,12 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Rectangle, Color
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.popup import Popup
+from file_handler import file_handler
 
 class VideoPlayerApp(BoxLayout):
     def __init__(self):
         super().__init__()
+        self.file_handler = file_handler()
         self.size_hint = (0.5, 0.6)
         self.pos_hint = {'right': 0.95, 'top': 0.95}
         self.orientation = 'vertical'
@@ -23,19 +25,23 @@ class VideoPlayerApp(BoxLayout):
         self.bind(pos=self.update_rectangle, size=self.update_rectangle)
         self.popup_file_manager = None
 
-        self.video.bind(on_loaded=self.on_video_loaded)
-        self.video_loaded = False
+        if self.file_handler.get_source() is not None:
+            self.video.source = self.file_handler.get_source()
+            #self.update_slider_position(self.video.position, self.video.duration) # HACK nevím co dělá xd
+        else:
+            self.video.bind(on_loaded=self.on_video_loaded)
+            self.video_loaded = False
 
     def update_rectangle(self, instance, value):
         self.rect.pos = self.pos
         self.rect.size = self.size
 
     def on_touch_up(self, touch):
-        if self.video.collide_point(*touch.pos) and not self.video_loaded and not self.video.source:
+        if self.video.collide_point(*touch.pos) and not self.video.source:
             self.open_file_manager()
 
     def open_file_manager(self):
-        file_chooser = FileChooserIconView(path='', filters=['*.mp4', '*.avi', '*.mkv', '*.mov', '*.wmv'])
+        file_chooser = FileChooserIconView(path='', filters=['*.mp3', '*.wav', '*.ogg', '*.mp4', '*.avi', '*.mkv', '*.mov', '*.wmv'])
         file_chooser.bind(on_submit=self.select_file)
         file_chooser.bind(on_cancel=self.close_file_manager)
         self.popup_file_manager = Popup(title='Vyberte video', content=file_chooser, size_hint=(0.9, 0.9))
@@ -44,6 +50,8 @@ class VideoPlayerApp(BoxLayout):
     def select_file(self, instance, selection, *args):
         if selection:
             self.video.source = selection[0]
+            print("Vybral:", selection[0])
+            self.file_handler.set_source(selection[0])
             self.popup_file_manager.dismiss()
 
     def close_file_manager(self, instance):

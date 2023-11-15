@@ -22,6 +22,7 @@ from kivy.app import App
 from waveform_panel import Waveform
 from videoplayer import VideoPlayerApp
 from table import InteractiveTable
+from file_handler import file_handler
 
 class SidePanel(Widget):
     '''A panel widget that attach to a side of the screen
@@ -264,9 +265,12 @@ class SidePanel(Widget):
         return super(SidePanel, self).on_touch_up(touch)
 
 class SidePanel(BoxLayout):
+
     def __init__(self, left_layout, **kwargs):
         Builder.load_file('sidepanel.kv')
         super().__init__(**kwargs)
+
+        self.file_handler = file_handler()
 
         self.left_layout = left_layout
         self.size_hint = (None, 0.97)
@@ -278,11 +282,13 @@ class SidePanel(BoxLayout):
         # Funkcionalita pro zobrazení waveform panelu
         self.waveform_visible = True
         self.waveform_instance = Waveform()
+        self.file_handler.add_component(self.waveform_instance)
         self.left_layout.add_widget(self.waveform_instance)
 
         # Funkcionalita pro zobrazení video přehrávače
         self.videoplayer_visible = True
         self.videoplayer_instance = VideoPlayerApp()
+        self.file_handler.add_component(self.videoplayer_instance)
         self.left_layout.add_widget(self.videoplayer_instance)
 
         # Funkcionalita pro zobrazení tabulky
@@ -326,20 +332,24 @@ class SidePanel(BoxLayout):
             self.table_visible = True
     def toggle_video(self):
         if self.videoplayer_visible:
+            self.file_handler.remove_component(self.videoplayer_instance)
             self.left_layout.remove_widget(self.videoplayer_instance)
             self.videoplayer_instance = None
             self.videoplayer_visible = False
         else:
             self.videoplayer_instance = VideoPlayerApp()
+            self.file_handler.add_component(self.videoplayer_instance)
             self.left_layout.add_widget(self.videoplayer_instance)
             self.videoplayer_visible = True
     def toggle_waveform(self):
         if self.waveform_visible:
+            self.file_handler.remove_component(self.waveform_instance)
             self.left_layout.remove_widget(self.waveform_instance)
             self.waveform_instance = None
             self.waveform_visible = False
         else:
             self.waveform_instance = Waveform()
+            self.file_handler.add_component(self.waveform_instance)
             self.left_layout.add_widget(self.waveform_instance)
             self.waveform_visible = True
 
