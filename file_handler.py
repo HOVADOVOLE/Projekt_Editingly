@@ -10,12 +10,12 @@ class file_handler:
 
     def get_source(self):
         return self.source
-    def set_source(self, source):
-        self.source = source
-    def get_video_position(self):
-        return self.video_position
     def set_video_position(self, video_position):
         self.video_position = video_position
+    def get_video_position(self):
+        return self.video_position
+    def set_source(self, source):
+        self.source = source
     def get_max_value(self):
         return self.max_value
     def set_max_value(self, max_value):

@@ -79,7 +79,8 @@ class Waveform(BoxLayout):
             
             Color(0,0,0,1)
             Line(rectangle=(0, 0, self.ids.canvas_box.width, self.ids.canvas_box.height), width=2)
-
+    def check_source(self):
+        pass
     def create_wave(self):
         self.points = []
 
@@ -109,12 +110,13 @@ class Waveform(BoxLayout):
             Window.bind(size=self.update_wave_size) # zajišťuje responsivitu pro přenos mezi monitory
             Window.bind(on_draw=self.update_wave_size) # zajišťuje responsivitu i když vypnu okno a pak ho zase zapnu
     def update_slider_position(self, key, *larg):
-        #self.ids.brightnessControl.max = self.file_handler.get_max_value()
         a = self.file_handler.get_max_value()
-        print(a)
         self.ids.brightnessControl.max = a
-        #f a == 0 or a == 1:
-        #   self.ids.brightnessControl.max = a
-        #rint("max v wp:", self.ids.brightnessControl.max)
-        #print(self.ids.brightnessControl.max)
         self.ids.brightnessControl.value = self.file_handler.get_video_position()
+
+        # Kontroluje, jestli byl změnený zdroj videa
+        if self.audio_source is None:
+            if self.file_handler.get_source() is not None:
+                source = self.file_handler.get_source()
+                self.audio_source = AudioSegment.from_file(source)
+                self.create_wave()

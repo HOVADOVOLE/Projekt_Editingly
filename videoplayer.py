@@ -4,6 +4,7 @@ from kivy.graphics import Rectangle, Color
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.popup import Popup
 from file_handler import file_handler
+from kivy.clock import Clock
 
 class VideoPlayerApp(BoxLayout):
     def __init__(self):
@@ -28,17 +29,29 @@ class VideoPlayerApp(BoxLayout):
 
         if self.file_handler.get_source() is not None:
             self.video.source = self.file_handler.get_source()
-            #self.update_slider_position(self.video.position) # HACK nevím co dělá xd
+            self.video_loaded = True
         else:
             self.video.bind(on_loaded=self.on_video_loaded)
             self.video_loaded = False
+
+        Clock.schedule_interval(self.check_source, 0.1)
     def update_slider_position(self, instance, value):
         self.file_handler.set_video_position(value)
         self.file_handler.set_max_value(self.video.duration)
-        print("max v VP:", self.file_handler.get_max_value())
     def update_rectangle(self, instance, value):
         self.rect.pos = self.pos
         self.rect.size = self.size
+
+    def check_source(self, key, *larg):
+        # Kontroluje jestli náhodou není video načtené z waveformu
+        if self.video.source == "":
+            if self.file_handler.get_source() is not None:
+                self.video.source = self.file_handler.get_source()
+                self.video_loaded = True
+                self.unbind(on_touch_up=self.on_touch_up)
+                Clock.unschedule(self.check_source)
+                #self.update_slider_position(self.video.position)
+
 
     def on_touch_up(self, touch):
         if self.video.collide_point(*touch.pos) and not self.video.source:
