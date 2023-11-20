@@ -2,7 +2,7 @@ from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.popup import Popup
-from kivy.graphics import Line, Color
+from kivy.graphics import Line, Color, Rectangle
 from pydub import AudioSegment
 import numpy as np
 from kivy.core.window import Window
@@ -10,6 +10,7 @@ from file_handler import file_handler
 from kivy.clock import Clock
 
 Builder.load_file('waveform.kv')
+
 
 class Waveform(BoxLayout):
     def __init__(self, **kwargs):
@@ -20,13 +21,29 @@ class Waveform(BoxLayout):
         self.audio_source = None
         self.popup_file_manager = None
         self.samples = []
+        self.pocatek = None
+        self.konec = None
 
         Clock.schedule_interval(self.update_slider_position, 0.1)
+
+        self.ids.canvas_box.bind(on_touch_down=self.stisk)
+        self.ids.canvas_box.bind(on_touch_up=self.pusteni)
 
         if self.file_handler.get_source() is not None:
             source = self.file_handler.get_source()
             self.audio_source = AudioSegment.from_file(source)
             self.create_wave()
+
+    def stisk(self, instance, touch):
+        if self.ids.canvas_box.collide_point(*touch.pos):
+            self.pocatek = touch.pos[0]
+            self.ids.brightnessControl.value = touch.pos[0]
+            self.file_handler.set_video_position(touch.pos[0])
+
+    def pusteni(self, instance, touch):
+        if self.ids.canvas_box.collide_point(*touch.pos):
+            self.konec = touch.pos[0]
+            self.draw_section()
 
     def move_slider_backward(self):
         if self.ids.brightnessControl.value > self.ids.brightnessControl.min:
@@ -43,6 +60,25 @@ class Waveform(BoxLayout):
             source = self.file_handler.get_source()
             self.audio_source = AudioSegment.from_file(source)
             self.create_wave()
+
+    def draw_section(self):
+        delka = abs(self.pocatek - self.konec)
+        self.prohozeni()
+
+        if delka > 20 and self.audio_source is not None:
+            with self.ids.canvas_box.canvas.after:
+                Color(1, 0.549, 0, 1)
+                Line(points=[self.pocatek, self.ids.canvas_box.y, self.pocatek, self.ids.canvas_box.y + self.ids.canvas_box.height], width=2)
+                Color(1, 0, 0, 0.2)
+                Rectangle(pos=(min(self.pocatek, self.konec), self.ids.canvas_box.y), size=(delka, self.ids.canvas_box.height))
+                Color(1, 0.549, 0, 1)
+                Line(points=[self.konec, self.ids.canvas_box.y, self.konec, self.ids.canvas_box.y + self.ids.canvas_box.height], width=2)
+
+    def prohozeni(self):
+        if self.pocatek > self.konec:
+            temp = self.pocatek
+            self.pocatek = self.konec
+            self.konec = temp
 
     def open_file_manager(self):
         file_chooser = FileChooserIconView(path='./', filters=['*.mp3', '*.wav', '*.ogg', '*.mp4', '*.avi', '*.mkv', '*.mov', '*.wmv'])
@@ -61,6 +97,7 @@ class Waveform(BoxLayout):
 
     def close_file_manager(self, instance):
         self.popup_file_manager.dismiss()
+
     def update_wave_size(self, *args):
         num_samples = len(self.samples)
         step = int(num_samples / self.width)
@@ -74,13 +111,12 @@ class Waveform(BoxLayout):
 
         self.ids.canvas_box.canvas.clear()
         with self.ids.canvas_box.canvas:
-            Color(1,1,1,1)
+            Color(1, 1, 1, 1)
             Line(points=self.points, close=False, width=1)
-            
-            Color(0,0,0,1)
+
+            Color(0, 0, 0, 1)
             Line(rectangle=(0, 0, self.ids.canvas_box.width, self.ids.canvas_box.height), width=2)
-    def check_source(self):
-        pass
+
     def create_wave(self):
         self.points = []
 
@@ -96,7 +132,7 @@ class Waveform(BoxLayout):
                 self.points.extend([x, y])
 
             with self.ids.canvas_box.canvas:
-                Color(1,1,1,1)
+                Color(1, 1, 1, 1)
                 Line(points=self.points, close=False, width=1)
 
             try:
@@ -104,11 +140,12 @@ class Waveform(BoxLayout):
             except:
                 print('Waveform button not found')
 
-            Window.bind(on_resize=self.update_wave_size) # zajišťuje responsivitu pro změnu velikosti okna
-            Window.bind(on_maximize=self.update_wave_size) # zajišťuje responsivitu pro maximalizaci okna
-            Window.bind(on_restore=self.update_wave_size) # zajišťuje responsivitu pro zmenšení okna
-            Window.bind(size=self.update_wave_size) # zajišťuje responsivitu pro přenos mezi monitory
-            Window.bind(on_draw=self.update_wave_size) # zajišťuje responsivitu i když vypnu okno a pak ho zase zapnu
+            Window.bind(on_resize=self.update_wave_size)  # zajišťuje responsivitu pro změnu velikosti okna
+            Window.bind(on_maximize=self.update_wave_size)  # zajišťuje responsivitu pro maximalizaci okna
+            Window.bind(on_restore=self.update_wave_size)  # zajišťuje responsivitu pro zmenšení okna
+            Window.bind(size=self.update_wave_size)  # zajišťuje responsivitu pro přenos mezi monitory
+            Window.bind(on_draw=self.update_wave_size)  # zajišťuje responsivitu i když vypnu okno a pak ho zase zapnu
+
     def update_slider_position(self, key, *larg):
         a = self.file_handler.get_max_value()
         self.ids.brightnessControl.max = a

@@ -50,8 +50,6 @@ class VideoPlayerApp(BoxLayout):
                 self.video_loaded = True
                 self.unbind(on_touch_up=self.on_touch_up)
                 Clock.unschedule(self.check_source)
-                #self.update_slider_position(self.video.position)
-
 
     def on_touch_up(self, touch):
         if self.video.collide_point(*touch.pos) and not self.video.source:
