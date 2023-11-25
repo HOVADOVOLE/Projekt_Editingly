@@ -39,7 +39,7 @@ class InteractiveTable(RelativeLayout):
                 ('Text', dp(50)),
             ],
             row_data=[
-                ('1', '00:00:00', '00:00:00', '00:00:00', 'Neco text ahoj jak se máš nevím potřebuju dlouhý text lol'),
+                ('1', '00:00:00', '00:00:00', '00:00:00', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer lacinia. Duis bibendum.'),
                 ('2', '00:00:00', '00:00:00', '00:00:00', 'Text'),
                 ('3', '00:00:00', '00:00:00', '00:00:00', 'Text'),
                 ('4', '00:00:00', '00:00:00', '00:00:00', 'Text'),
@@ -49,6 +49,7 @@ class InteractiveTable(RelativeLayout):
         self.data_table.bind(on_row_press=self.select_row)
     def select_row(self, table, row):
         self.row_num = int(row.index/len(table.column_data))
+
         self.start_input.text = self.data_table.row_data[self.row_num][1]
         self.end_input.text = self.data_table.row_data[self.row_num][2]
         self.text_input.text = self.data_table.row_data[self.row_num][4]
@@ -62,10 +63,12 @@ class InteractiveTable(RelativeLayout):
         self.modify_box.add_widget(self.start_input)
         self.modify_box.add_widget(self.end_input)
         self.modify_box.add_widget(self.text_input)
+
         modify = Button(text='Modify')
         modify.bind(on_release=self.update_values)
         delete = Button(text='Delete')
         delete.bind(on_release=self.delete_row)
+
         self.button_box.add_widget(modify)
         self.button_box.add_widget(delete)
         self.modify_box.add_widget(self.button_box)

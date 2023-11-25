@@ -53,6 +53,7 @@
                             size_hint: 0.25, 0.5
                             text: "||"
                             pos_hint: {"center_x": 0.5}  # Adjusted position for center alignment
+                            on_release: root.video_state()  # Při kliknutí zavolá funkci stop_video()
                         Button:
                             size_hint: 0.25, 0.5
                             text: ">>>"

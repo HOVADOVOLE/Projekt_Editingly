@@ -6,6 +6,9 @@ class file_handler:
             cls._instance.source = None
             cls._instance.video_position = 0
             cls._instance.max_value = 0
+            cls._instance.video_play = False
+            cls._instance.cas_posun = 0
+            cls._instance.posun = False
         return cls._instance
 
     def get_source(self):
@@ -20,3 +23,15 @@ class file_handler:
         return self.max_value
     def set_max_value(self, max_value):
         self.max_value = max_value
+    def set_video_play(self, video_play):
+        self.video_play = video_play
+    def get_video_play(self):
+        return self.video_play
+    def set_cas_posun(self, cas_posun):
+        self.cas_posun = cas_posun
+    def get_cas_posun(self):
+        return self.cas_posun
+    def get_posun(self):
+        return self.posun
+    def set_posun(self, posun):
+        self.posun = posun

@@ -33,14 +33,36 @@ class VideoPlayerApp(BoxLayout):
         else:
             self.video.bind(on_loaded=self.on_video_loaded)
             self.video_loaded = False
+        self.video.bind(state=self.change_state)
+        Clock.schedule_interval(self.check_source, 0.1) # Kontroluje jestli náhodou není video načtené z waveformu
+        Clock.schedule_interval(self.check_state, 0.2) # Kontlole state videa
+        Clock.schedule_interval(self.video_posun, 0.2) # Posun videa
+    def change_state(self, *larg):
+        if self.video.state == 'play':
+            self.file_handler.set_video_play(True)
+        else:
+            self.file_handler.set_video_play(False)
+    def video_posun(self, *larg):
+        posun = self.file_handler.get_posun()
+        # převede mi aktuální čas videa na procenta
+        cas_v_procentech = (100 * self.video.position) / self.video.duration
+        if posun:
+            self.file_handler.set_posun(False)
+            # převede mi posun na procenta
+            posun_v_procentech = (100 * self.file_handler.get_cas_posun()) / self.video.duration
+            self.video.seek((cas_v_procentech + posun_v_procentech) / 100)
 
-        Clock.schedule_interval(self.check_source, 0.1)
     def update_slider_position(self, instance, value):
         self.file_handler.set_video_position(value)
         self.file_handler.set_max_value(self.video.duration)
     def update_rectangle(self, instance, value):
         self.rect.pos = self.pos
         self.rect.size = self.size
+    def check_state(self, *larg):
+        if self.file_handler.get_video_play():
+            self.video.state = 'play'
+        else:
+            self.video.state = 'pause'
 
     def check_source(self, key, *larg):
         # Kontroluje jestli náhodou není video načtené z waveformu
