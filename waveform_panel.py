@@ -23,7 +23,6 @@ class Waveform(BoxLayout):
         self.samples = []
         self.pocatek = None
         self.konec = None
-
         Clock.schedule_interval(self.update_slider_position, 0.1)
 
         self.ids.canvas_box.bind(on_touch_down=self.stisk)

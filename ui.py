@@ -5,13 +5,15 @@ from top_menu import TopMenu
 from sidepanel import SidePanel
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.relativelayout import RelativeLayout
+from kivymd.app import MDApp
 
 
 
-class MainApp(App):
+class MainApp(MDApp):
     def build(self):
         self.title = 'Editingly - 0.0.2'
-        # Základní nastavení okay
+
+        # Základní nastavení okna
         Window.maximize()
         Window.minimum_width = 1280
         Window.minimum_height = 720
@@ -24,7 +26,7 @@ class MainApp(App):
         left = RelativeLayout()
         grid.add_widget(left)
         grid.add_widget(SidePanel(left))
-        
+
         ui_box.add_widget(grid)
         ui_box.add_widget(TopMenu())
 
