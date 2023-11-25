@@ -9,6 +9,8 @@ class file_handler:
             cls._instance.video_play = False
             cls._instance.cas_posun = 0
             cls._instance.posun = False
+            cls._instance.nastav_posun = 0
+            cls._instance.posunuti_videa = False
         return cls._instance
 
     def get_source(self):
@@ -35,3 +37,11 @@ class file_handler:
         return self.posun
     def set_posun(self, posun):
         self.posun = posun
+    def set_posunuti_videa(self, posun):
+        self.nastav_posun = posun
+    def get_posunuti_videa(self):
+        return self.nastav_posun
+    def set_posunuti_videa_state(self, posun):
+        self.posunuti_videa = posun
+    def get_posunuti_videa_state(self):
+        return self.posunuti_videa

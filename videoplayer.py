@@ -37,6 +37,11 @@ class VideoPlayerApp(BoxLayout):
         Clock.schedule_interval(self.check_source, 0.1) # Kontroluje jestli náhodou není video načtené z waveformu
         Clock.schedule_interval(self.check_state, 0.2) # Kontlole state videa
         Clock.schedule_interval(self.video_posun, 0.2) # Posun videa
+        Clock.schedule_interval(self.check_slider_movement, 0.2)# Kontroluje jestli se neposouvá slider
+    def check_slider_movement(self, *larg):
+        if self.file_handler.get_posunuti_videa_state():
+            self.file_handler.set_posunuti_videa_state(False)
+            self.video.seek(((100 * self.file_handler.get_posunuti_videa()) / self.video.duration)/100)
     def change_state(self, *larg):
         if self.video.state == 'play':
             self.file_handler.set_video_play(True)

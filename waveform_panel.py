@@ -20,6 +20,7 @@ class Waveform(BoxLayout):
         self.audio_source = None
         self.popup_file_manager = None
         self.samples = []
+        self.last_point = 0
         self.pocatek = None
         self.konec = None
 
@@ -32,6 +33,13 @@ class Waveform(BoxLayout):
             source = self.file_handler.get_source()
             self.audio_source = AudioSegment.from_file(source)
             self.create_wave()
+        self.ids.brightnessControl.bind(value=self.on_value)
+    def on_value(self, instance, value):
+        if abs(self.last_point - value) > 1:
+            self.file_handler.set_posunuti_videa_state(True)
+            self.file_handler.set_posunuti_videa(value)
+            #self.file_handler.set_cas_posun(5)
+        self.last_point = value
 
     def stisk(self, instance, touch):
         if self.ids.canvas_box.collide_point(*touch.pos):
