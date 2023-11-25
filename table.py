@@ -44,17 +44,22 @@ class InteractiveTable(RelativeLayout):
                 ('5', '00:00:00', '00:00:00', '00:00:00', 'Text'),
             ]
         )
+        self.data_table.bind(on_row_press=self.select_row)
+    def select_row(self, table, row):
+        row_num = int(row.index/len(table.column_data))
+        self.start_input.text = self.data_table.row_data[row_num][1]
+        self.end_input.text = self.data_table.row_data[row_num][2]
+        self.text_input.text = self.data_table.row_data[row_num][4]
     def render_modify_box(self):
-        self.modify_box = BoxLayout(orientation='horizontal', size_hint=(0.55, 0.1),
-                                    pos_hint={'left': 0.7, 'top': 0.48})
+        self.modify_box = BoxLayout(orientation='horizontal', size_hint=(0.55, 0.1), pos_hint={'left': 0.7, 'top': 0.48})
         self.button_box = BoxLayout(orientation='vertical', size_hint=(1, 1))
+        self.start_input = TextInput(hint_text='Start Time', multiline=False, size_hint_y=0.4, pos_hint={'center_y': 0.5})
+        self.end_input = TextInput(hint_text='End Time', multiline=False, size_hint_y=0.4, pos_hint={'center_y': 0.5})
+        self.text_input = TextInput(hint_text='Text', multiline=False, size_hint_y=0.4, pos_hint={'center_y': 0.5})
 
-        self.modify_box.add_widget(
-            TextInput(hint_text='Start Time', multiline=False, size_hint_y=0.4, pos_hint={'center_y': 0.5}))
-        self.modify_box.add_widget(
-            TextInput(hint_text='End Time', multiline=False, size_hint_y=0.4, pos_hint={'center_y': 0.5}))
-        self.modify_box.add_widget(
-            TextInput(hint_text='Text', multiline=False, size_hint_y=0.4, pos_hint={'center_y': 0.5}))
+        self.modify_box.add_widget(self.start_input)
+        self.modify_box.add_widget(self.end_input)
+        self.modify_box.add_widget(self.text_input)
         modify = Button(text='Modify')
         modify.bind(on_release=self.update_values)
         delete = Button(text='Delete')
