@@ -23,6 +23,7 @@ class Waveform(BoxLayout):
         self.last_point = 0
         self.pocatek = None
         self.konec = None
+        #self.pointer_pos = [0, 0]
 
         Clock.schedule_interval(self.update_slider_position, 0.1)
 
@@ -43,9 +44,14 @@ class Waveform(BoxLayout):
 
     def stisk(self, instance, touch):
         if self.ids.canvas_box.collide_point(*touch.pos):
+            if touch.is_double_tap:
+                with self.ids.canvas_box.canvas.after:
+                    Color(0, 0, 0, 1)
+                    Line(points=[touch.pos[0], self.ids.canvas_box.y, touch.pos[0], self.ids.canvas_box.y + self.ids.canvas_box.height], width=4)
             self.pocatek = touch.pos[0]
             self.ids.brightnessControl.value = touch.pos[0]
             self.file_handler.set_video_position(touch.pos[0])
+
 
     def pusteni(self, instance, touch):
         if self.ids.canvas_box.collide_point(*touch.pos):
