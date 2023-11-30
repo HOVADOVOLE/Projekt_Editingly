@@ -23,6 +23,8 @@ class Waveform(BoxLayout):
         self.last_point = 0
         self.pocatek = None
         self.konec = None
+        self.sections = [] # ukládá pozice začátku a konce sekce
+        self.previous_win_size = None
         #self.pointer_pos = [0, 0]
 
         Clock.schedule_interval(self.update_slider_position, 0.1)
@@ -56,6 +58,7 @@ class Waveform(BoxLayout):
     def pusteni(self, instance, touch):
         if self.ids.canvas_box.collide_point(*touch.pos):
             self.konec = touch.pos[0]
+            self.sections.append([self.pocatek, self.konec])
             self.draw_section()
 
     def move_slider_backward(self):
@@ -121,8 +124,16 @@ class Waveform(BoxLayout):
 
     def close_file_manager(self, instance):
         self.popup_file_manager.dismiss()
+    def rewrite_sectors(self):
+        for i in range(len(self.sections)):
+            print("původní", self.sections[i][0], self.ids.canvas_box.width)
+
+            self.sections[i][0] = self.sections[i][0] * Window.width / self.previous_win_size
+            self.sections[i][1] = self.sections[i][1] * Window.width / self.previous_win_size
+            print("nový", self.sections[i][0], Window.width)
 
     def update_wave_size(self, *args):
+        self.ids.canvas_box.canvas.clear()
         num_samples = len(self.samples)
         step = int(num_samples / self.width)
         self.points = []
@@ -132,8 +143,7 @@ class Waveform(BoxLayout):
             x = i * self.ids.canvas_box.width / num_samples
 
             self.points.extend([x, y])
-
-        self.ids.canvas_box.canvas.clear()
+        #self.ids.canvas_box.canvas.clear()
         with self.ids.canvas_box.canvas:
             Color(1, 1, 1, 1)
             Line(points=self.points, close=False, width=1)
@@ -141,6 +151,26 @@ class Waveform(BoxLayout):
             Color(0, 0, 0, 1)
             Line(rectangle=(0, 0, self.ids.canvas_box.width, self.ids.canvas_box.height), width=2)
 
+        try:
+            with self.ids.canvas_box.canvas.after:
+                if self.ids.canvas_box.canvas.has_after:
+                    self.ids.canvas_box.canvas.after.clear()
+                print("resize")
+                self.rewrite_sectors()
+                for i in range(len(self.sections)):
+                    Color(1, 0.549, 0, 1)
+                    Line(points=[self.sections[i][0], self.ids.canvas_box.y, self.sections[i][0],
+                                 self.ids.canvas_box.y + self.ids.canvas_box.height], width=2)
+                    Color(1, 0, 0, 0.2)
+                    Rectangle(pos=(min(self.sections[i][0], self.sections[i][1]), self.ids.canvas_box.y),
+                              size=(abs(self.sections[i][0] - self.sections[i][1]), self.ids.canvas_box.height))
+                    Color(1, 0.549, 0, 1)
+                    Line(points=[self.sections[i][1], self.ids.canvas_box.y, self.sections[i][1],
+                                 self.ids.canvas_box.y + self.ids.canvas_box.height], width=2)
+        except:
+            print("Něco se nepovedlo")
+
+        self.previous_win_size = Window.width
     def create_wave(self):
         self.points = []
 
