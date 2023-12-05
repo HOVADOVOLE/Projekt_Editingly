@@ -8,6 +8,7 @@ import numpy as np
 from kivy.core.window import Window
 from file_handler import file_handler
 from kivy.clock import Clock
+from kivy.uix.button import Button
 
 Builder.load_file('waveform.kv')
 
@@ -26,6 +27,8 @@ class Waveform(BoxLayout):
         self.sections = [] # ukládá pozice začátku a konce sekce
         self.previous_win_size = None
 
+        self.selected_sector = None
+
         Clock.schedule_interval(self.update_slider_position, 0.1)
 
         self.ids.canvas_box.bind(on_touch_down=self.stisk)
@@ -42,20 +45,41 @@ class Waveform(BoxLayout):
             self.file_handler.set_posunuti_videa(value)
             #self.file_handler.set_cas_posun(5)
         self.last_point = value
+    def render_popup(self, touch):
+        x, y = touch
 
+        content = BoxLayout(orientation='vertical')
+        content.add_widget(Button(text='Přidat sekci'))
+        content.add_widget(Button(text='Vymazat sekci'))
+
+        popup = Popup(content=content, title='Popup Menu', size_hint=(None, None), size=(200, 150))
+
+        # Zobrazíme Popup menu na zadaných souřadnicích
+        popup.open(pos=(x, y))
+    def try_find_sector(self, mouse_position):
+        for i in range(len(self.sections)):
+            if self.sections[i][0] <= mouse_position[0] <= self.sections[i][1]:
+                self.selected_sector = i
+                self.render_popup(mouse_position)
+                break # Ukončí cyklus hledání sektoru
     def stisk(self, instance, touch):
         if self.ids.canvas_box.collide_point(*touch.pos):
-            if touch.is_double_tap:
-                with self.ids.canvas_box.canvas.after:
-                    Color(0, 0, 0, 1)
-                    Line(points=[touch.pos[0], self.ids.canvas_box.y, touch.pos[0], self.ids.canvas_box.y + self.ids.canvas_box.height], width=4)
-            self.pocatek = touch.pos[0]
-            self.ids.brightnessControl.value = touch.pos[0]
-            self.file_handler.set_video_position(touch.pos[0])
+            # kontroluje, jestli není stisknuto pravé tlačítko myši
+            if self.audio_source is not None:
+                if touch.button == 'right':
+                    self.try_find_sector(touch.pos)
+                    #self.render_popup(touch)
 
+                if touch.is_double_tap:
+                    with self.ids.canvas_box.canvas.after:
+                        Color(0, 0, 0, 1)
+                        Line(points=[touch.pos[0], self.ids.canvas_box.y, touch.pos[0], self.ids.canvas_box.y + self.ids.canvas_box.height], width=4)
+                self.pocatek = touch.pos[0]
+                self.ids.brightnessControl.value = touch.pos[0]
+                self.file_handler.set_video_position(touch.pos[0])
 
     def pusteni(self, instance, touch):
-        if self.ids.canvas_box.collide_point(*touch.pos):
+        if self.ids.canvas_box.collide_point(*touch.pos) and self.audio_source is not None:
             self.konec = touch.pos[0]
             self.sections.append([self.pocatek, self.konec])
             self.draw_section()

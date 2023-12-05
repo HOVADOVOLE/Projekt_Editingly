@@ -6,6 +6,9 @@ from sidepanel import SidePanel
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.relativelayout import RelativeLayout
 from kivymd.app import MDApp
+from kivy.config import Config
+
+Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
 
 
