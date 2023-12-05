@@ -26,6 +26,7 @@ class Waveform(BoxLayout):
         self.konec = None
         self.sections = [] # ukládá pozice začátku a konce sekce
         self.previous_win_size = None
+        self.popup = None
 
         self.selected_sector = None
 
@@ -45,17 +46,28 @@ class Waveform(BoxLayout):
             self.file_handler.set_posunuti_videa(value)
             #self.file_handler.set_cas_posun(5)
         self.last_point = value
+    def add_section(self, instance):
+        pass
+        #self.ids.canvas_box.canvas.after.remove_group('section')
+        #self.sections.append([self.pocatek, self.konec])
+        #self.draw_section()
+    def delete_section(self, instance):
+        self.ids.canvas_box.canvas.after.remove_group('section')
+        del self.sections[self.selected_sector]
+        self.rerender_sections()
+        
+        self.popup.dismiss()
     def render_popup(self, touch):
         x, y = touch
 
         content = BoxLayout(orientation='vertical')
-        content.add_widget(Button(text='Přidat sekci'))
-        content.add_widget(Button(text='Vymazat sekci'))
+        content.add_widget(Button(text='Přidat sekci', on_press=self.add_section))
+        content.add_widget(Button(text='Vymazat sekci', on_press=self.delete_section))
 
-        popup = Popup(content=content, title='Popup Menu', size_hint=(None, None), size=(200, 150))
+        self.popup = Popup(content=content, title='Popup Menu', size_hint=(None, None), size=(200, 150))
 
         # Zobrazíme Popup menu na zadaných souřadnicích
-        popup.open(pos=(x, y))
+        self.popup.open(pos=(x, y))
     def try_find_sector(self, mouse_position):
         for i in range(len(self.sections)):
             if self.sections[i][0] <= mouse_position[0] <= self.sections[i][1]:
@@ -68,7 +80,6 @@ class Waveform(BoxLayout):
             if self.audio_source is not None:
                 if touch.button == 'right':
                     self.try_find_sector(touch.pos)
-                    #self.render_popup(touch)
 
                 if touch.is_double_tap:
                     with self.ids.canvas_box.canvas.after:
