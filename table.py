@@ -5,6 +5,8 @@ from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.clock import Clock
+from title_manager import title_manager
 
 class InteractiveTable(RelativeLayout):
     def __init__(self, **kwargs):
@@ -14,6 +16,7 @@ class InteractiveTable(RelativeLayout):
         self.pos_hint = {'top': 0.95, 'left': 0.90}
 
         self.row_num = 0
+        self.title_manager = title_manager()
 
         # Vykreslení tabulky a boxu pro úpravu
         self.render_table()
@@ -22,6 +25,8 @@ class InteractiveTable(RelativeLayout):
         # Přidání MDDataTable do RelativeLayout
         self.add_widget(self.data_table)
         self.add_widget(self.modify_box)
+
+        Clock.schedule_interval(self.check_update_table, 0.2)
     def update_values(self, *args):
         self.data_table.row_data[self.row_num] = (str(self.row_num+1), self.start_input.text, self.end_input.text, '00:00:00', self.text_input.text)
     def delete_row(self, *args):
@@ -39,7 +44,7 @@ class InteractiveTable(RelativeLayout):
                 ('Text', dp(50)),
             ],
             row_data=[
-                ('1', '00:00:00', '00:00:00', '00:00:00', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer lacinia. Duis bibendum.'),
+                ('1', '00:00:00', '00:00:00', '00:00:00', 'Text'),
                 ('2', '00:00:00', '00:00:00', '00:00:00', 'Text'),
                 ('3', '00:00:00', '00:00:00', '00:00:00', 'Text'),
                 ('4', '00:00:00', '00:00:00', '00:00:00', 'Text'),
@@ -72,3 +77,11 @@ class InteractiveTable(RelativeLayout):
         self.button_box.add_widget(modify)
         self.button_box.add_widget(delete)
         self.modify_box.add_widget(self.button_box)
+    def add_row(self, start, end, text):
+        self.data_table.row_data.append((str(len(self.data_table.row_data)+1), start, end, '00:00:00', text))
+        self.title_manager.add_row = False
+        print('added row')
+    def check_update_table(self, *args):
+        if self.title_manager.get_add_row():
+            print(self.title_manager.start_time, self.title_manager.end_time, self.title_manager.text)
+            self.add_row(self.title_manager.start_time, self.title_manager.end_time, self.title_manager.text)

@@ -7,6 +7,7 @@ from pydub import AudioSegment
 import numpy as np
 from kivy.core.window import Window
 from file_handler import file_handler
+from title_manager import title_manager
 from kivy.clock import Clock
 from kivy.uix.button import Button
 
@@ -16,6 +17,7 @@ class Waveform(BoxLayout):
     def __init__(self, **kwargs):
         super(Waveform, self).__init__(**kwargs)
         self.file_handler = file_handler()
+        self.title_manager = title_manager()
 
         self.points = []
         self.audio_source = None
@@ -31,7 +33,6 @@ class Waveform(BoxLayout):
         self.selected_sector = None
 
         Clock.schedule_interval(self.update_slider_position, 0.1)
-
         self.ids.canvas_box.bind(on_touch_down=self.stisk)
         self.ids.canvas_box.bind(on_touch_up=self.pusteni)
 
@@ -47,19 +48,18 @@ class Waveform(BoxLayout):
             #self.file_handler.set_cas_posun(5)
         self.last_point = value
     def add_section(self, instance):
-        pass
-        #self.ids.canvas_box.canvas.after.remove_group('section')
+        self.title_manager.create_subtitle_section(self.pocatek, self.konec)
+        #self.ids.canvas_box.canvas.after.remofve_group('section')
         #self.sections.append([self.pocatek, self.konec])
         #self.draw_section()
     def delete_section(self, instance):
         self.ids.canvas_box.canvas.after.remove_group('section')
         del self.sections[self.selected_sector]
         self.rerender_sections()
-        
+
         self.popup.dismiss()
     def render_popup(self, touch):
         x, y = touch
-
         content = BoxLayout(orientation='vertical')
         content.add_widget(Button(text='Přidat sekci', on_press=self.add_section))
         content.add_widget(Button(text='Vymazat sekci', on_press=self.delete_section))
