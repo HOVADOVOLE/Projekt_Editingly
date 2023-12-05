@@ -8,6 +8,8 @@ class title_manager:
             cls._instance.text = None
             cls._instance.row_index = None
             cls._instance.add_row = False
+            cls._instance.remove_row_statement = False
+            cls._instance.index_to_remove = 0
         return cls._instance
     def create_subtitle_section(self, start_time, end_time):
         self.start_time = start_time
@@ -17,3 +19,8 @@ class title_manager:
         self.add_row = True
     def get_add_row(self):
         return self.add_row
+    def remove_row(self, index):
+        self.remove_row_statement = True
+        self.index_to_remove = index
+    def get_remove_row(self):
+        return self.remove_row_statement

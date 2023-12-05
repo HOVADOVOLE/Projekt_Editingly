@@ -45,16 +45,13 @@ class Waveform(BoxLayout):
         if abs(self.last_point - value) > 1:
             self.file_handler.set_posunuti_videa_state(True)
             self.file_handler.set_posunuti_videa(value)
-            #self.file_handler.set_cas_posun(5)
         self.last_point = value
     def add_section(self, instance):
         self.title_manager.create_subtitle_section(self.pocatek, self.konec)
-        #self.ids.canvas_box.canvas.after.remofve_group('section')
-        #self.sections.append([self.pocatek, self.konec])
-        #self.draw_section()
     def delete_section(self, instance):
         self.ids.canvas_box.canvas.after.remove_group('section')
         del self.sections[self.selected_sector]
+        self.title_manager.remove_row(self.selected_sector)
         self.rerender_sections()
 
         self.popup.dismiss()
