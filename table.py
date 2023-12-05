@@ -17,8 +17,9 @@ class InteractiveTable(RelativeLayout):
 
         self.row_num = 0
         self.title_manager = title_manager()
+        self.data_table = None
 
-        # Vykreslení tabulky a boxu pro úpravu
+        # Vykreslení tabulky a boxu pro úpravué
         self.render_table()
         self.render_modify_box()
 
@@ -28,12 +29,13 @@ class InteractiveTable(RelativeLayout):
 
         Clock.schedule_interval(self.check_update_table, 0.2)
     def update_values(self, *args):
-        self.data_table.row_data[self.row_num] = (str(self.row_num+1), self.start_input.text, self.end_input.text, '00:00:00', self.text_input.text)
+        self.data_table.row_data[self.row_num] = (str(self.row_num+1), self.start_input.text, self.end_input.text, "00:00:00", self.text_input.text)
     def delete_row(self, *args):
         self.data_table.row_data.pop(self.row_num)
     def render_table(self):
         # Inicializace MDDataTable s novým řádkem
         self.data_table = MDDataTable(
+            rows_num=1000,
             size_hint=(0.55, 0.5),
             pos_hint={'left': 0.7, 'top': 0.99},
             column_data=[
@@ -43,21 +45,13 @@ class InteractiveTable(RelativeLayout):
                 ('Duration', dp(18)),
                 ('Text', dp(50)),
             ],
-            row_data=[
-                ('1', '00:00:00', '00:00:00', '00:00:00', 'Text'),
-                ('2', '00:00:00', '00:00:00', '00:00:00', 'Text'),
-                ('3', '00:00:00', '00:00:00', '00:00:00', 'Text'),
-                ('4', '00:00:00', '00:00:00', '00:00:00', 'Text'),
-                ('5', '00:00:00', '00:00:00', '00:00:00', 'Text'),
-            ]
         )
         self.data_table.bind(on_row_press=self.select_row)
     def select_row(self, table, row):
         self.row_num = int(row.index/len(table.column_data))
-
-        self.start_input.text = self.data_table.row_data[self.row_num][1]
-        self.end_input.text = self.data_table.row_data[self.row_num][2]
-        self.text_input.text = self.data_table.row_data[self.row_num][4]
+        self.start_input.text = str(self.data_table.row_data[self.row_num][1])
+        self.end_input.text = str(self.data_table.row_data[self.row_num][2])
+        self.text_input.text = str(self.data_table.row_data[self.row_num][4])
     def render_modify_box(self):
         self.modify_box = BoxLayout(orientation='horizontal', size_hint=(0.55, 0.1), pos_hint={'left': 0.7, 'top': 0.48})
         self.button_box = BoxLayout(orientation='vertical', size_hint=(1, 1))
@@ -77,11 +71,11 @@ class InteractiveTable(RelativeLayout):
         self.button_box.add_widget(modify)
         self.button_box.add_widget(delete)
         self.modify_box.add_widget(self.button_box)
-    def add_row(self, start, end, text):
-        self.data_table.row_data.append((str(len(self.data_table.row_data)+1), start, end, '00:00:00', text))
+    def add_row(self, start, end, text) -> None:
+        self.data_table.add_row((str(len(self.data_table.row_data)+1), start, end, "00:00:00", text))
         self.title_manager.add_row = False
-        print('added row')
+    def remove_row(self, row_num):
+        self.data_table.row_data.pop(row_num)
     def check_update_table(self, *args):
         if self.title_manager.get_add_row():
-            print(self.title_manager.start_time, self.title_manager.end_time, self.title_manager.text)
             self.add_row(self.title_manager.start_time, self.title_manager.end_time, self.title_manager.text)
