@@ -32,7 +32,8 @@ class Waveform(BoxLayout):
 
         self.selected_sector = None
 
-        Clock.schedule_interval(self.update_slider_position, 0.1)
+        Clock.schedule_interval(self.clock_handler, 0.1)
+
         self.ids.canvas_box.bind(on_touch_down=self.stisk)
         self.ids.canvas_box.bind(on_touch_up=self.pusteni)
 
@@ -250,8 +251,24 @@ class Waveform(BoxLayout):
             Window.bind(on_restore=self.update_size_of_sections)
             Window.bind(size=self.update_size_of_sections)
             Window.bind(on_draw=self.update_size_of_sections)
+    def clock_handler(self, *args):
+        self.update_slider_position()
+        print(self.title_manager.get_remove_row())
+        if self.title_manager.get_remove_row():
+            self.delete_section_by_table(self.title_manager.index_to_remove)
+    def delete_section_by_table(self, index):
+        if index is not None:
+            try:
+                self.ids.canvas_box.canvas.after.remove_group('section')
+                del self.sections[index]
+                self.title_manager.remove_row(index)
+                self.rerender_sections()
 
-    def update_slider_position(self, key, *larg):
+                self.title_manager.remove_row_statement = False
+                self.title_manager.index_to_remove = None
+            except:
+                return
+    def update_slider_position(self, *larg):
         a = self.file_handler.get_max_value()
         self.ids.brightnessControl.max = a
         self.ids.brightnessControl.value = self.file_handler.get_video_position()

@@ -32,6 +32,7 @@ class InteractiveTable(RelativeLayout):
         self.data_table.row_data[self.row_num] = (str(self.row_num+1), self.start_input.text, self.end_input.text, "00:00:00", self.text_input.text)
     def delete_row(self, *args):
         self.data_table.row_data.pop(self.row_num)
+        self.title_manager.remove_section(self.row_num)
     def render_table(self):
         # Inicializace MDDataTable s novým řádkem
         self.data_table = MDDataTable(
@@ -77,7 +78,7 @@ class InteractiveTable(RelativeLayout):
     def remove_row(self, row_num):
         try:
             self.data_table.row_data.pop(row_num)
-            self.title_manager.remove_row = False
+            #self.title_manager.remove_row = False
         except:
             return
     def clock_action_handler(self, *args):
