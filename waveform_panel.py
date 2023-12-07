@@ -90,8 +90,9 @@ class Waveform(BoxLayout):
     def pusteni(self, instance, touch):
         if self.ids.canvas_box.collide_point(*touch.pos) and self.audio_source is not None:
             self.konec = touch.pos[0]
-            self.sections.append([self.pocatek, self.konec])
-            self.draw_section()
+            if not self.check_prekryti():
+                self.sections.append([self.pocatek, self.konec])
+                self.draw_section()
 
     def move_slider_backward(self):
         if self.ids.brightnessControl.value > self.ids.brightnessControl.min:
@@ -118,13 +119,37 @@ class Waveform(BoxLayout):
             self.audio_source = AudioSegment.from_file(source)
             self.create_wave()
 
+    def check_sections_to_create(self):
+        if len(self.sections) == 0:
+            return False
+        for i in range(len(self.sections)):
+            # Zjistí, zda se nově vytvářená sekce překrývá s existující sekcí
+            if (self.sections[i][0] <= self.pocatek <= self.sections[i][1] or
+                    self.sections[i][0] <= self.konec <= self.sections[i][1] or
+                    (self.pocatek <= self.sections[i][0] and self.konec >= self.sections[i][1])):
+                print("Překrytí")
+                return True
+        print("Nebylo překrytí")
+        return False
+    def check_prekryti(self):
+        print("sekce:", self.sections)
+        print("body:", self.pocatek, self.konec)
+        if self.pocatek is not None and self.konec is not None:
+            for i in range(len(self.sections)):
+                if (self.sections[i][0] <= self.pocatek <= self.sections[i][1] or
+                        self.sections[i][0] <= self.konec <= self.sections[i][1] or
+                        (self.pocatek <= self.sections[i][0] and self.konec >= self.sections[i][1])):
+                    print("Překrytí")
+                    return True
+
+            print("Nebylo překrytí")
+        return False
     def draw_section(self):
         delka = abs(self.pocatek - self.konec)
         self.prohozeni()
+        # cyklus zkontroluje jestli vytvářená sekce nepřekrývá s již existujícími sekcemi, a pokud ano, zak vrátí true
         if delka > 20 and self.audio_source is not None:
-            # Clear previous sections by removing the 'section' group
-            #self.ids.canvas_box.canvas.after.remove_group('section')
-
+            self.ids.canvas_box.canvas.after.remove_group('section')
             self.ids.canvas_box.canvas.after.add(Color(1, 0.549, 0, 1))
             self.ids.canvas_box.canvas.after.add(Line(points=[self.pocatek, self.ids.canvas_box.y, self.pocatek,
                          self.ids.canvas_box.y + self.ids.canvas_box.height], width=2, group='section'))
@@ -173,11 +198,11 @@ class Waveform(BoxLayout):
             print("Něco se nepovedlo")
 
     def rerender_sections(self):
-        self.rewrite_sectors()
+        #HACK pokud to nefunguje, zkus to před rewrite_sectors
 
+        self.rewrite_sectors()
         # Clear previous sections by removing the 'section' group
         self.ids.canvas_box.canvas.after.remove_group('section')
-
         with self.ids.canvas_box.canvas.after:
             for i in range(len(self.sections)):
                 Color(1, 0.549, 0, 1)
