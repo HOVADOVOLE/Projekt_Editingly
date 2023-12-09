@@ -132,22 +132,15 @@ class Waveform(BoxLayout):
             if (self.sections[i][0] <= self.pocatek <= self.sections[i][1] or
                     self.sections[i][0] <= self.konec <= self.sections[i][1] or
                     (self.pocatek <= self.sections[i][0] and self.konec >= self.sections[i][1])):
-                print("Překrytí")
                 return True
-        print("Nebylo překrytí")
         return False
     def check_prekryti(self):
-        print("sekce:", self.sections)
-        print("body:", self.pocatek, self.konec)
         if self.pocatek is not None and self.konec is not None:
             for i in range(len(self.sections)):
                 if (self.sections[i][0] <= self.pocatek <= self.sections[i][1] or
                         self.sections[i][0] <= self.konec <= self.sections[i][1] or
                         (self.pocatek <= self.sections[i][0] and self.konec >= self.sections[i][1])):
-                    print("Překrytí")
                     return True
-
-            print("Nebylo překrytí")
         return False
     def draw_section(self):
         delka = abs(self.pocatek - self.konec)
@@ -282,7 +275,6 @@ class Waveform(BoxLayout):
             Window.bind(on_draw=self.update_size_of_sections)
     def clock_handler(self, *args):
         self.update_slider_position()
-        print(self.title_manager.get_remove_row())
         if self.title_manager.get_remove_row():
             self.delete_section_by_table(self.title_manager.index_to_remove)
     def delete_section_by_table(self, index):

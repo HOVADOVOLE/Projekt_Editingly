@@ -34,10 +34,12 @@ class VideoPlayerApp(BoxLayout):
             self.video.bind(on_loaded=self.on_video_loaded)
             self.video_loaded = False
         self.video.bind(state=self.change_state)
-        Clock.schedule_interval(self.check_source, 0.1) # Kontroluje jestli náhodou není video načtené z waveformu
-        Clock.schedule_interval(self.check_state, 0.2) # Kontlole state videa
-        Clock.schedule_interval(self.video_posun, 0.2) # Posun videa
-        Clock.schedule_interval(self.check_slider_movement, 0.2)# Kontroluje jestli se neposouvá slider
+        Clock.schedule_interval(self.clock_handler, 0.2)
+    def clock_handler(self, *larg):
+        self.check_source() # Kontroluje jestli náhodou není video načtené z waveformu
+        self.check_state() # Kontlole state videa
+        self.video_posun() # Posun videa
+        self.check_slider_movement() # Kontroluje jestli se neposouvá slider
     def check_slider_movement(self, *larg):
         if self.file_handler.get_posunuti_videa_state():
             self.file_handler.set_posunuti_videa_state(False)
@@ -69,7 +71,7 @@ class VideoPlayerApp(BoxLayout):
         else:
             self.video.state = 'pause'
 
-    def check_source(self, key, *larg):
+    def check_source(self, *larg):
         # Kontroluje jestli náhodou není video načtené z waveformu
         if self.video.source == "":
             if self.file_handler.get_source() is not None:
@@ -99,7 +101,6 @@ class VideoPlayerApp(BoxLayout):
         self.popup_file_manager.dismiss()
 
     def on_video_loaded(self, instance, value):
-        print("jsem tu")
         self.video_loaded = True
         self.unbind(on_touch_up=self.on_touch_up)
         self.update_slider_position(self.video.position)

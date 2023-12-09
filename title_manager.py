@@ -19,6 +19,8 @@ class title_manager:
         self.add_row = True
     def get_add_row(self):
         return self.add_row
+    def get_remove_row(self):
+        return self.remove_row_statement
     #HACK Musí být vytvořeny 2 stejné funkce, protože by se jinak hádali, možná na to kouknout, jak by se to dalo vylepšit
     def remove_row(self, index):
         self.remove_row_statement = True
@@ -26,5 +28,3 @@ class title_manager:
     def remove_section(self, index):
         self.remove_row_statement = True
         self.index_to_remove = index
-    def get_remove_row(self):
-        return self.remove_row_statement
