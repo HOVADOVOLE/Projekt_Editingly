@@ -48,7 +48,12 @@ class Waveform(BoxLayout):
             self.file_handler.set_posunuti_videa(value)
         self.last_point = value
     def add_section(self, instance):
-        self.title_manager.create_subtitle_section(self.pocatek, self.konec)
+        # if statement kontroluje, jestli sekce již nemá vytvořenou titulku
+        if not self.sections[self.selected_sector][2]:
+            self.sections[self.selected_sector][2] = True
+            self.title_manager.create_subtitle_section(self.pocatek, self.konec)
+            self.popup.dismiss()
+
     def delete_section(self, instance):
         self.ids.canvas_box.canvas.after.remove_group('section')
         del self.sections[self.selected_sector]
@@ -91,7 +96,7 @@ class Waveform(BoxLayout):
         if self.ids.canvas_box.collide_point(*touch.pos) and self.audio_source is not None:
             self.konec = touch.pos[0]
             if not self.check_prekryti():
-                self.sections.append([self.pocatek, self.konec])
+                self.sections.append([self.pocatek, self.konec, False])
                 self.draw_section()
 
     def move_slider_backward(self):
@@ -159,7 +164,6 @@ class Waveform(BoxLayout):
             self.ids.canvas_box.canvas.after.add(Color(1, 0.549, 0, 1))
             self.ids.canvas_box.canvas.after.add(Line(points=[self.konec, self.ids.canvas_box.y, self.konec,
                          self.ids.canvas_box.y + self.ids.canvas_box.height], width=2, group='section'))
-
     def prohozeni(self):
         if self.pocatek > self.konec:
             temp = self.pocatek
