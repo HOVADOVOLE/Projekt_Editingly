@@ -87,7 +87,11 @@ class Waveform(BoxLayout):
                 if touch.is_double_tap:
                     with self.ids.canvas_box.canvas.after:
                         Color(0, 0, 0, 1)
-                        Line(points=[touch.pos[0], self.ids.canvas_box.y, touch.pos[0], self.ids.canvas_box.y + self.ids.canvas_box.height], width=4)
+                        Line(points=[touch.pos[0], self.ids.canvas_box.y, touch.pos[0], self.ids.canvas_box.y + self.ids.canvas_box.height], width=4, group='pointer')
+                        # posune video na tuto pozici
+                        #self.file_handler.set_video_position(touch.pos[0])
+                        #self.file_handler.set_posunuti_videa_state(True)
+
                 self.pocatek = touch.pos[0]
                 self.ids.brightnessControl.value = touch.pos[0]
                 self.file_handler.set_video_position(touch.pos[0])
@@ -95,7 +99,7 @@ class Waveform(BoxLayout):
     def pusteni(self, instance, touch):
         if self.ids.canvas_box.collide_point(*touch.pos) and self.audio_source is not None:
             self.konec = touch.pos[0]
-            if not self.check_prekryti():
+            if not self.check_prekryti() and abs(self.pocatek - self.konec) > 10:
                 self.sections.append([self.pocatek, self.konec, False])
                 self.draw_section()
 
