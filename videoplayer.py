@@ -7,7 +7,7 @@ from file_handler import file_handler
 from kivy.clock import Clock
 from kivy.uix.label import Label
 from subtitle_handler import Subtitle_Handler
-
+from title_manager import title_manager
 class VideoPlayerApp(BoxLayout):
     def __init__(self):
         super().__init__()
@@ -18,6 +18,7 @@ class VideoPlayerApp(BoxLayout):
         self.padding = 10
         self.spacing = 10
 
+        self.title_manager = title_manager()
         self.subtitle_handler = Subtitle_Handler()
 
         with self.canvas:
@@ -96,6 +97,7 @@ class VideoPlayerApp(BoxLayout):
             if self.file_handler.get_source() is not None:
                 self.video.source = self.file_handler.get_source()
                 self.video_loaded = True
+                self.title_manager.max_video_position = self.video.duration
                 self.unbind(on_touch_up=self.on_touch_up)
                 Clock.unschedule(self.check_source)
 

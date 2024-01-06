@@ -239,6 +239,7 @@ class Waveform(BoxLayout):
             Color(0, 0, 0, 1)
             Line(rectangle=(0, 0, self.ids.canvas_box.width, self.ids.canvas_box.height), width=2)
 
+        self.title_manager.waveform_width = self.ids.canvas_box.width
         self.previous_win_size = Window.width
 
     def create_wave(self):
