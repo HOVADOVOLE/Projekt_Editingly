@@ -59,7 +59,7 @@ class InteractiveTable(RelativeLayout):
         self.row_num = int(row.index/len(table.column_data))
         self.start_input.text = str(self.data_table.row_data[self.row_num][1])
         self.end_input.text = str(self.data_table.row_data[self.row_num][2])
-        self.text_input.text = str(self.data_table.row_data[self.row_num][4])
+        self.text_input.text = str(self.data_table.row_data[self.row_num][3])
     def render_modify_box(self):
         self.modify_box = BoxLayout(orientation='horizontal', size_hint=(0.55, 0.1), pos_hint={'left': 0.7, 'top': 0.48})
         self.button_box = BoxLayout(orientation='vertical', size_hint=(1, 1))

@@ -5,6 +5,8 @@ from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.popup import Popup
 from file_handler import file_handler
 from kivy.clock import Clock
+from kivy.uix.label import Label
+from subtitle_handler import Subtitle_Handler
 
 class VideoPlayerApp(BoxLayout):
     def __init__(self):
@@ -16,13 +18,19 @@ class VideoPlayerApp(BoxLayout):
         self.padding = 10
         self.spacing = 10
 
+        self.subtitle_handler = Subtitle_Handler()
+
         with self.canvas:
             Color(0, 0, 0, 1)
             self.rect = Rectangle(pos=self.pos, size=self.size)
 
         self.video = VideoPlayer(size_hint=(1, 1), state='pause', allow_fullscreen=False)
         self.video.bind(position=self.update_slider_position)
+
+        self.subtitle_widget = SubtitleWidget()
+
         self.add_widget(self.video)
+        self.add_widget(self.subtitle_widget)
 
         self.bind(pos=self.update_rectangle, size=self.update_rectangle)
         self.popup_file_manager = None
@@ -33,13 +41,24 @@ class VideoPlayerApp(BoxLayout):
         else:
             self.video.bind(on_loaded=self.on_video_loaded)
             self.video_loaded = False
+
         self.video.bind(state=self.change_state)
         Clock.schedule_interval(self.clock_handler, 0.2)
+
     def clock_handler(self, *larg):
+        self.check_subtitle_change() # Kontroluje jestli se nemá změnit titulka
         self.check_source() # Kontroluje jestli náhodou není video načtené z waveformu
         self.check_state() # Kontlole state videa
         self.video_posun() # Posun videa
         self.check_slider_movement() # Kontroluje jestli se neposouvá slider
+    def check_subtitle_change(self, *larg):
+        print(self.video.position)
+        if self.subtitle_handler.is_next_subtitle(self.video.position * 100):
+            subtitle = self.subtitle_handler.return_current_subbtitle(self.video.position)
+            if subtitle is not None:
+                self.subtitle_widget.text = subtitle['text']
+            else:
+                self.subtitle_widget.text = ""
     def check_slider_movement(self, *larg):
         if self.file_handler.get_posunuti_videa_state():
             self.file_handler.set_posunuti_videa_state(False)
@@ -104,3 +123,26 @@ class VideoPlayerApp(BoxLayout):
         self.video_loaded = True
         self.unbind(on_touch_up=self.on_touch_up)
         self.update_slider_position(self.video.position)
+
+class SubtitleWidget(Label):
+    def __init__(self, **kwargs):
+        super(SubtitleWidget, self).__init__(**kwargs)
+        self.color = (1, 1, 0, 1)
+        self.size_hint = (0.5, 0.1)
+        self.pos_hint = {'right': 0.95, 'top': 0.85}
+        self.text = 'Subtitle'
+        self.font_size = 30
+        self.color = (1, 1, 1, 1)
+        self.halign = 'center'
+        self.valign = 'middle'
+        self.text = ""
+        self.bind(pos=self.update_rectangle, size=self.update_rectangle)
+
+        with self.canvas:
+            Color(1, 1, 1, 1)
+            self.rect = Rectangle(pos=self.pos, size=self.size)
+        def update_subtitle(self, text):
+            self.text = text
+    def update_rectangle(self, instance, value):
+        self.rect.pos = self.pos
+        self.rect.size = self.size

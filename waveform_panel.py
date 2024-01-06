@@ -199,8 +199,6 @@ class Waveform(BoxLayout):
             print("Něco se nepovedlo")
 
     def rerender_sections(self):
-        #HACK pokud to nefunguje, zkus to před rewrite_sectors
-
         self.rewrite_sectors()
         # Clear previous sections by removing the 'section' group
         self.ids.canvas_box.canvas.after.remove_group('section')
