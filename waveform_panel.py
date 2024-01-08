@@ -84,7 +84,7 @@ class Waveform(BoxLayout):
                 if touch.button == 'right':
                     self.try_find_sector(touch.pos)
 
-                if touch.is_double_tap:
+                if touch.is_double_tap and not touch.button == 'right':
                     with self.ids.canvas_box.canvas.after:
                         Color(0, 0, 0, 1)
                         Line(points=[touch.pos[0], self.ids.canvas_box.y, touch.pos[0], self.ids.canvas_box.y + self.ids.canvas_box.height], width=4, group='pointer')

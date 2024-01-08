@@ -15,20 +15,30 @@ class title_manager:
             cls._instance.max_video_position = 0
         return cls._instance
     def create_subtitle_section(self, start_time, end_time):
-        #self.start_time = self.waveform_width / start_time
-        #self.end_time = self.waveform_width / end_time
-        #todo někde upravit aby se nastavila max_video_position páč teď je na 0
-        self.start_time = self.waveform_width / self.max_video_position * start_time
-        self.end_time = self.waveform_width / self.max_video_position * end_time
-        print(self.start_time, self.end_time)
-        #self.text = "text"
-#
-        #self.add_row = True
+        # Přepočítání časů na základě pozice na čas z widgetu VideoPlayer
+        self.start_time = self.max_video_position * (start_time - 458.86) / self.waveform_width
+        self.end_time = self.max_video_position * (end_time - 458.86) / self.waveform_width
+
+        # Výpis pro kontrolu hodnot
+        print(
+            "Waveform Width:", self.waveform_width,
+            "Max Video Position:", self.max_video_position,
+            "Start Time:", self.start_time,
+            "End Time:", self.end_time,
+            "Original Start Time:", start_time,
+            "Original End Time:", end_time
+        )
+        # TODO 5.13 a 6.43
+        # TODO 8.23 a 8.89
+
+        # Nastavení příznaku pro přidání řádku (pokud je to vaše požadované chování)
+        self.add_row = True
+
     def get_add_row(self):
         return self.add_row
     def get_remove_row(self):
         return self.remove_row_statement
-    #HACK Musí být vytvořeny 2 stejné funkce, protože by se jinak hádali, možná na to kouknout, jak by se to dalo vylepšit
+    # HACK Musí být vytvořeny 2 stejné funkce, protože by se jinak hádali, možná na to kouknout, jak by se to dalo vylepšit
     def remove_row(self, index):
         self.remove_row_statement = True
         self.index_to_remove = index

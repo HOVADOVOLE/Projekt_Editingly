@@ -91,6 +91,9 @@ class VideoPlayerApp(BoxLayout):
         else:
             self.video.state = 'pause'
 
+        self.title_manager.video_position = self.video.position
+        self.title_manager.max_video_position = self.video.duration
+
     def check_source(self, *larg):
         # Kontroluje jestli náhodou není video načtené z waveformu
         if self.video.source == "":
@@ -116,6 +119,7 @@ class VideoPlayerApp(BoxLayout):
         if selection:
             self.video.source = selection[0]
             self.file_handler.set_source(selection[0])
+            self.title_manager.max_video_position = self.video.duration
             self.popup_file_manager.dismiss()
 
     def close_file_manager(self, instance):
@@ -141,10 +145,10 @@ class SubtitleWidget(Label):
         self.bind(pos=self.update_rectangle, size=self.update_rectangle)
 
         with self.canvas:
-            Color(1, 1, 1, 1)
-            self.rect = Rectangle(pos=self.pos, size=self.size)
-        def update_subtitle(self, text):
-            self.text = text
+            Color(1, 1, 1, 0)
+            self.rect = Rectangle(pos=self.pos, size=self.size, group='subtitle')
+    def update_subtitle(self, text):
+        self.text = text
     def update_rectangle(self, instance, value):
         self.rect.pos = self.pos
         self.rect.size = self.size
