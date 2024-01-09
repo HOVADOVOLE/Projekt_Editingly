@@ -19,18 +19,6 @@ class title_manager:
         self.start_time = self.max_video_position * (start_time - 458.86) / self.waveform_width
         self.end_time = self.max_video_position * (end_time - 458.86) / self.waveform_width
 
-        # Výpis pro kontrolu hodnot
-        print(
-            "Waveform Width:", self.waveform_width,
-            "Max Video Position:", self.max_video_position,
-            "Start Time:", self.start_time,
-            "End Time:", self.end_time,
-            "Original Start Time:", start_time,
-            "Original End Time:", end_time
-        )
-        # TODO 5.13 a 6.43
-        # TODO 8.23 a 8.89
-
         # Nastavení příznaku pro přidání řádku (pokud je to vaše požadované chování)
         self.add_row = True
 

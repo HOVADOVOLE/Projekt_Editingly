@@ -10,6 +10,7 @@ from file_handler import file_handler
 from title_manager import title_manager
 from kivy.clock import Clock
 from kivy.uix.button import Button
+from subtitle_handler import Subtitle_Handler
 
 Builder.load_file('waveform.kv')
 
@@ -18,6 +19,7 @@ class Waveform(BoxLayout):
         super(Waveform, self).__init__(**kwargs)
         self.file_handler = file_handler()
         self.title_manager = title_manager()
+        self.subtitle_handler = Subtitle_Handler()
 
         self.points = []
         self.audio_source = None
@@ -52,6 +54,8 @@ class Waveform(BoxLayout):
         if not self.sections[self.selected_sector][2]:
             self.sections[self.selected_sector][2] = True
             self.title_manager.create_subtitle_section(self.pocatek, self.konec)
+            self.title_manager.add_row = True
+            self.subtitle_handler.add_subtitle(self.pocatek, self.konec, "ahoj")
             self.popup.dismiss()
 
     def delete_section(self, instance):

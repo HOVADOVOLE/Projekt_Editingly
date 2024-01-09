@@ -80,8 +80,8 @@ class InteractiveTable(RelativeLayout):
         self.button_box.add_widget(delete)
         self.modify_box.add_widget(self.button_box)
     def add_row(self, start, end, text) -> None:
-        self.data_table.add_row((str(len(self.data_table.row_data)+1), start, end, text))
-        self.subtitle_handler.add_subtitle(start, end, text)
+        self.data_table.add_row((str(len(self.data_table.row_data)+1), start, end, "text"))
+        self.subtitle_handler.add_subtitle(start, end, "text")
 
         self.title_manager.add_row = False
     def remove_row(self, row_num):
@@ -95,6 +95,7 @@ class InteractiveTable(RelativeLayout):
         self.check_delete_row()
     def check_update_table(self):
         if self.title_manager.get_add_row():
+            #self.subtitle_handler.add_subtitle(self.title_manager.start_time, self.title_manager.end_time, self.title_manager.text)
             self.add_row(self.title_manager.start_time, self.title_manager.end_time, self.title_manager.text)
     def check_delete_row(self):
         if self.title_manager.get_remove_row():

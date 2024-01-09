@@ -8,6 +8,7 @@ from kivy.clock import Clock
 from kivy.uix.label import Label
 from subtitle_handler import Subtitle_Handler
 from title_manager import title_manager
+import json
 class VideoPlayerApp(BoxLayout):
     def __init__(self):
         super().__init__()
@@ -54,12 +55,20 @@ class VideoPlayerApp(BoxLayout):
         self.check_slider_movement() # Kontroluje jestli se neposouvá slider
     def check_subtitle_change(self, *larg):
         print(self.video.position)
-        if self.subtitle_handler.is_next_subtitle(self.video.position * 100):
-            subtitle = self.subtitle_handler.return_current_subbtitle(self.video.position)
-            if subtitle is not None:
-                self.subtitle_widget.text = subtitle['text']
-            else:
-                self.subtitle_widget.text = ""
+        #print(self.subtitle_handler.print_json())
+        subtitle = self.subtitle_handler.return_current_subbtitle(self.video.position)
+        if subtitle is not None:
+            self.subtitle_widget.text = subtitle['text']
+            print(subtitle["text"])
+        else:
+            self.subtitle_widget.text = ""
+            print("nic")
+        #if subtitle is not None:
+        #    self.subtitle_widget.text = subtitle[0]['text']
+        #elif self.subtitle_widget.text != "":
+        #    self.subtitle_widget.text = ""
+        #elif subtitle is None:
+        #    self.subtitle_widget.text = ""
     def check_slider_movement(self, *larg):
         if self.file_handler.get_posunuti_videa_state():
             self.file_handler.set_posunuti_videa_state(False)
