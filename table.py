@@ -34,6 +34,7 @@ class InteractiveTable(RelativeLayout):
         Clock.schedule_interval(self.clock_action_handler, 0.2)
     def update_values(self, *args):
         self.data_table.row_data[self.row_num] = (str(self.row_num+1), self.start_input.text, self.end_input.text, self.text_input.text)
+        self.subtitle_handler.modify_subtitle(self.row_num, self.start_input.text, self.end_input.text, self.text_input.text)
     def delete_row(self, *args):
         try:
             self.data_table.row_data.pop(self.row_num)
@@ -81,7 +82,7 @@ class InteractiveTable(RelativeLayout):
         self.modify_box.add_widget(self.button_box)
     def add_row(self, start, end, text) -> None:
         self.data_table.add_row((str(len(self.data_table.row_data)+1), start, end, "text"))
-        self.subtitle_handler.add_subtitle(start, end, "text")
+        self.subtitle_handler.add_subtitle(start, end, text)
 
         self.title_manager.add_row = False
     def remove_row(self, row_num):

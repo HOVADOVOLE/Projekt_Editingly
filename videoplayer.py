@@ -59,16 +59,8 @@ class VideoPlayerApp(BoxLayout):
         subtitle = self.subtitle_handler.return_current_subbtitle(self.video.position)
         if subtitle is not None:
             self.subtitle_widget.text = subtitle['text']
-            print(subtitle["text"])
         else:
             self.subtitle_widget.text = ""
-            print("nic")
-        #if subtitle is not None:
-        #    self.subtitle_widget.text = subtitle[0]['text']
-        #elif self.subtitle_widget.text != "":
-        #    self.subtitle_widget.text = ""
-        #elif subtitle is None:
-        #    self.subtitle_widget.text = ""
     def check_slider_movement(self, *larg):
         if self.file_handler.get_posunuti_videa_state():
             self.file_handler.set_posunuti_videa_state(False)
@@ -144,10 +136,11 @@ class SubtitleWidget(Label):
         super(SubtitleWidget, self).__init__(**kwargs)
         self.color = (1, 1, 0, 1)
         self.size_hint = (0.5, 0.1)
-        self.pos_hint = {'right': 0.95, 'top': 0.85}
+        self.pos_hint = {"center_x": 0.5, 'top': 0.85}
         self.text = 'Subtitle'
         self.font_size = 30
         self.color = (1, 1, 1, 1)
+        self.size_hint_x = 0.6
         self.halign = 'center'
         self.valign = 'middle'
         self.text = ""
