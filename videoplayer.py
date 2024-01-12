@@ -150,6 +150,11 @@ class SubtitleWidget(Label):
             Color(1, 1, 1, 0)
             self.rect = Rectangle(pos=self.pos, size=self.size, group='subtitle')
     def update_subtitle(self, text):
+        self.canvas.remove_group('subtitle')
+        if text is not None or text is not "":
+            with self.canvas:
+                Color(1, 1, 1, 0.5)
+                Rectangle(pos=self.pos, size=self.size, group='subtitle')
         self.text = text
     def update_rectangle(self, instance, value):
         self.rect.pos = self.pos

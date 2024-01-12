@@ -10,11 +10,9 @@ from kivy.config import Config
 
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
-
-
 class MainApp(MDApp):
     def build(self):
-        self.title = 'Editingly - 0.0.3'
+        self.title = 'Editingly - 0.0.4'
 
         # Základní nastavení okna
         Window.maximize()

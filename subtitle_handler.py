@@ -15,11 +15,11 @@ class Subtitle_Handler:
     # přidá titulku do JSONu
     def add_subtitle(self, od, do, text):
         if text is None:
-            text = "asd"
+            text = ""
         self.subtitle_list.append({'start': od, 'end': do, 'text': text})
     def modify_subtitle(self, id_radku, od, do, text):
         if text is None:
-            text = "asd"
+            text = ""
         self.subtitle_list[id_radku] = {'start': float(od), 'end': float(do), 'text': text}
     # odebere titulku z JSONu
     def remove_subtitle(self, id_titulky):
