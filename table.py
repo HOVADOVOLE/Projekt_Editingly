@@ -1,6 +1,6 @@
 from kivy.uix.relativelayout import RelativeLayout
 from kivymd.uix.datatables import MDDataTable
-from kivymd.uix.textfield import MDTextField
+from kivy.uix.label import Label
 from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
@@ -33,6 +33,8 @@ class InteractiveTable(RelativeLayout):
         self.add_widget(self.modify_box)
 
         Clock.schedule_interval(self.clock_action_handler, 0.2)
+
+        self.popup = Popup(title='Error', content=Label(text='Error in entered data'), size_hint=(None, None), size=(400, 400), auto_dismiss=True)
     def update_values(self, *args):
         # TODO zkusit přecastování na float a popřípadě zaokrouhlit
         if self.is_float(self.start_input.text) and self.is_float(self.end_input.text):
@@ -41,10 +43,10 @@ class InteractiveTable(RelativeLayout):
                 self.subtitle_handler.modify_subtitle(self.row_num, self.start_input.text, self.end_input.text, self.text_input.text)
             else:
                 # start je větší než end
-                pass
+                self.popup.open()
         else:
             # nejsou float
-            pass
+            self.popup.open()
     def is_float(self, value):
         if value is not None:
             try:
