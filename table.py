@@ -36,10 +36,9 @@ class InteractiveTable(RelativeLayout):
 
         self.popup = Popup(title='Error', content=Label(text='Error in entered data'), size_hint=(None, None), size=(400, 400), auto_dismiss=True)
     def update_values(self, *args):
-        # TODO zkusit přecastování na float a popřípadě zaokrouhlit
         if self.is_float(self.start_input.text) and self.is_float(self.end_input.text):
             if float(self.start_input.text) < float(self.end_input.text):
-                self.data_table.row_data[self.row_num] = (str(self.row_num+1), self.start_input.text, self.end_input.text, self.text_input.text)
+                self.data_table.row_data[self.row_num] = (str(self.row_num+1), round(float(self.start_input.text), 2), round(float(self.end_input.text), 2), self.text_input.text)
                 self.subtitle_handler.modify_subtitle(self.row_num, self.start_input.text, self.end_input.text, self.text_input.text)
             else:
                 # start je větší než end

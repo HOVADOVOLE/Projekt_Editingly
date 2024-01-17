@@ -16,7 +16,7 @@ class Subtitle_Handler:
     def add_subtitle(self, od, do, text):
         if text is None:
             text = ""
-        self.subtitle_list.append({'start': od, 'end': do, 'text': text})
+        self.subtitle_list.append({'start': od, 'end': do, 'text': "text"})
     def modify_subtitle(self, id_radku, od, do, text):
         if text is None:
             text = ""
@@ -40,7 +40,6 @@ class Subtitle_Handler:
         with open(self.path, 'w') as file:
             json.dump(self.subtitle_list, file)
     def print_json(self):
-        print("here", self.subtitle_list)
         return self.subtitle_list
     # Načte všechny titulky z JSONu pro případ znovu otevření aplikace
     def rozbal_json(self):
