@@ -8,6 +8,7 @@ from kivy.uix.button import Button
 from kivy.clock import Clock
 from title_manager import title_manager
 from subtitle_handler import Subtitle_Handler
+from kivy.uix.popup import Popup
 
 class InteractiveTable(RelativeLayout):
     def __init__(self, **kwargs):
@@ -33,8 +34,25 @@ class InteractiveTable(RelativeLayout):
 
         Clock.schedule_interval(self.clock_action_handler, 0.2)
     def update_values(self, *args):
-        self.data_table.row_data[self.row_num] = (str(self.row_num+1), self.start_input.text, self.end_input.text, self.text_input.text)
-        self.subtitle_handler.modify_subtitle(self.row_num, self.start_input.text, self.end_input.text, self.text_input.text)
+        # TODO zkusit přecastování na float a popřípadě zaokrouhlit
+        if self.is_float(self.start_input.text) and self.is_float(self.end_input.text):
+            if float(self.start_input.text) < float(self.end_input.text):
+                self.data_table.row_data[self.row_num] = (str(self.row_num+1), self.start_input.text, self.end_input.text, self.text_input.text)
+                self.subtitle_handler.modify_subtitle(self.row_num, self.start_input.text, self.end_input.text, self.text_input.text)
+            else:
+                # start je větší než end
+                pass
+        else:
+            # nejsou float
+            pass
+    def is_float(self, value):
+        if value is not None:
+            try:
+                float(value)
+                return True
+            except ValueError:
+                return False
+        return False
     def delete_row(self, *args):
         try:
             self.data_table.row_data.pop(self.row_num)
@@ -52,7 +70,7 @@ class InteractiveTable(RelativeLayout):
                 ('#', dp(9)),
                 ('Start Time', dp(18)),
                 ('End Time', dp(18)),
-                ('Text', dp(50)),
+                ('Text', dp(65)),
             ],
         )
         self.data_table.bind(on_row_press=self.select_row)
@@ -74,6 +92,7 @@ class InteractiveTable(RelativeLayout):
 
         modify = Button(text='Modify')
         modify.bind(on_release=self.update_values)
+
         delete = Button(text='Delete')
         delete.bind(on_release=self.delete_row)
 
@@ -82,6 +101,8 @@ class InteractiveTable(RelativeLayout):
         self.modify_box.add_widget(self.button_box)
     def add_row(self, start, end, text) -> None:
         self.data_table.add_row((str(len(self.data_table.row_data)+1), start, end, "text"))
+        start = round(start, 2)
+        end = round(end, 2)
         self.subtitle_handler.add_subtitle(start, end, text)
 
         self.title_manager.add_row = False
@@ -96,6 +117,8 @@ class InteractiveTable(RelativeLayout):
         self.check_delete_row()
     def check_update_table(self):
         if self.title_manager.get_add_row():
+            self.title_manager.start_time = round(self.title_manager.start_time, 2)
+            self.title_manager.end_time = round(self.title_manager.end_time, 2)
             #self.subtitle_handler.add_subtitle(self.title_manager.start_time, self.title_manager.end_time, self.title_manager.text)
             self.add_row(self.title_manager.start_time, self.title_manager.end_time, self.title_manager.text)
     def check_delete_row(self):
