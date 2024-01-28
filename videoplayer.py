@@ -54,7 +54,6 @@ class VideoPlayerApp(BoxLayout):
         self.video_posun() # Posun videa
         self.check_slider_movement() # Kontroluje jestli se neposouvá slider
     def check_subtitle_change(self, *larg):
-        print(self.video.position)
         #print(self.subtitle_handler.print_json())
         subtitle = self.subtitle_handler.return_current_subbtitle(self.video.position)
         if subtitle is not None:

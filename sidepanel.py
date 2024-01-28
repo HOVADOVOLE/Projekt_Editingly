@@ -23,6 +23,12 @@ from waveform_panel import Waveform
 from videoplayer import VideoPlayerApp
 from table import InteractiveTable
 from file_handler import file_handler
+from kivy.uix.popup import Popup
+from kivy.uix.gridlayout import GridLayout
+#from generate_subtitle_popup import GenerateSubtitlePopup
+from dropdown import ComboBox
+from kivy.uix.checkbox import CheckBox
+from kivy.uix.textinput import TextInput
 
 class SidePanel(Widget):
     '''A panel widget that attach to a side of the screen
@@ -309,6 +315,11 @@ class SidePanel(BoxLayout):
         else:
             self.show()
 
+    def show_popup(self):
+        layout = GenerateSubtitlePopup()
+        print(layout.height)
+        popup = Popup(title='Generate subtitles', content=layout, size_hint=(None, None), size=(400, 400), auto_dismiss=True)
+        popup.open()
     def new_project(self):
         print("New project")
     def open_project(self):
@@ -316,7 +327,7 @@ class SidePanel(BoxLayout):
     def save_project(self):
         print("Save project")
     def generate_subtitles(self):
-        print("Generate subtitles")
+        self.show_popup()
     def toggle_table(self):
         if self.table_visible:
             self.left_layout.remove_widget(self.table_instance)
@@ -348,3 +359,48 @@ class SidePanel(BoxLayout):
 
     def help(self):
         print("Help")
+
+class GenerateSubtitlePopup(FloatLayout):
+    def __init__(self):
+        super().__init__()
+        self.size_hint = (1, 1)
+        self.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
+        self.size = (400, 400)
+        self.anchor_x = 'center'
+        self.anchor_y = 'center'
+        #self.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
+        main_grid = GridLayout(cols=1, rows=2, size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+
+        grid = GridLayout(cols=2, rows=4, size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+
+        grid.add_widget(Label(text='Language of audio:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        grid.add_widget(ComboBox(options=['English', 'Czech', 'Russian'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+
+        grid.add_widget(Label(text='Format of subtitles:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        grid.add_widget(ComboBox(options=['SubRip (.srt)', 'Text file (.txt)', 'Adobe Premiere Pro (.xml)'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+
+        grid.add_widget(Label(text='Audio / Video file:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        grid.add_widget(Button(text='Choose file', size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+
+        grid.add_widget(Label(text='Limits:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        grid.add_widget(CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+
+        main_grid.add_widget(grid)
+
+        #--------------------------------------
+        limit_grid = GridLayout(cols=3, rows=2, size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+
+        limit_grid.add_widget(Label(text='Max. number of characters:', size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        limit_grid.add_widget(TextInput(hint_text='', multiline=False, size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        limit_grid.add_widget(CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+
+        limit_grid.add_widget(Label(text='Max. number of words:', size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        limit_grid.add_widget(TextInput(hint_text='', multiline=False, size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        limit_grid.add_widget(CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+
+        main_grid.add_widget(limit_grid)
+        self.add_widget(main_grid)
+
+        #self.add_widget(Label(text='Start time', size_hint=(0.5, 0.1), pos_hint={'top': 0.9, 'left': 0.1}))
+        #self.add_widget(Label(text='End time', size_hint=(0.5, 0.1), pos_hint={'top': 0.9, 'right': 0.9}))
+        #self.add_widget(Label(text='Text', size_hint=(0.5, 0.1), pos_hint={'top': 0.8, 'left': 0.1}))
