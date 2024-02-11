@@ -90,22 +90,3 @@ class ComboBox(Factory.TextInput):
             self.drop_down.open(self)
         # else:
         #     self.drop_down.dismiss()
-
-if __name__ == '__main__':
-    from kivy.app import App
-    class MyApp(App):
-        def build(self):
-            return Builder.load_string('''
-FloatLayout:
-    BoxLayout:
-        size_hint: .5, None
-        pos: 0, root.top - self.height
-        ComboBox:
-            options: ['Hello', 'World']
-        ComboBox:
-            options: '99 bottles of beer on the wall , Tito hit of them down from the wall ,  98 bottles of beer!'.split(' ')
-        Button
-
-
-''')
-    MyApp().run()

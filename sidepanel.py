@@ -369,7 +369,7 @@ class GenerateSubtitlePopup(FloatLayout):
         self.anchor_x = 'center'
         self.anchor_y = 'center'
         #self.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
-        main_grid = GridLayout(cols=1, rows=2, size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        main_grid = GridLayout(cols=1, rows=3, size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
 
         grid = GridLayout(cols=2, rows=4, size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
 
@@ -383,20 +383,65 @@ class GenerateSubtitlePopup(FloatLayout):
         grid.add_widget(Button(text='Choose file', size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
 
         grid.add_widget(Label(text='Limits:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        grid.add_widget(CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        limits = CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}, active=False)
+        limits.bind(active=partial(self.on_limit_checkbox_active))
+        grid.add_widget(limits)
 
         #--------------------
 
         grid_two = GridLayout(cols=3, rows=2, size_hint=(1, None), pos_hint={'center_x': 0.5, 'center_y': 0.5})
         grid_two.add_widget(Label(text='Max. number of characters:', size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        grid_two.add_widget(TextInput(hint_text='', multiline=False, size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        grid_two.add_widget(CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        self.numOfCharsLimit = TextInput(hint_text='', multiline=False, size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}, disabled=True)
+        self.checkOfCharsLimit = CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}, disabled=True, group='charsLimits')
+        self.checkOfCharsLimit.bind(active=partial(self.on_limit_select))
+        grid_two.add_widget(self.numOfCharsLimit)
+        grid_two.add_widget(self.checkOfCharsLimit)
 
         grid_two.add_widget(Label(text='Max. number of words:', size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        grid_two.add_widget(TextInput(hint_text='', multiline=False, size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        grid_two.add_widget(CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        self.numOfWordsLimit = TextInput(hint_text='', multiline=False, size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}, disabled=True)
+        self.checkOfWordsLimit = CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}, disabled=True, group='wordsLimits')
+        self.checkOfWordsLimit.bind(active=partial(self.on_limit_select))
+        grid_two.add_widget(self.numOfWordsLimit)
+        grid_two.add_widget(self.checkOfWordsLimit)
 
         main_grid.add_widget(grid)
         main_grid.add_widget(grid_two)
+        flex = FloatLayout(size_hint=(1, None), pos_hint={'center_x': 0.5, 'bottom': 0.95})
+        generate = Button(text='Generate', size=(100, 50), size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.45})
+        generate.bind(on_press=self.on_generate_submit)
+        flex.add_widget(generate)
+
+        main_grid.add_widget(flex)
         self.add_widget(main_grid)
 
+    '''Kontroluje, jestli je zaškrtnutý checkbox pro aktivování limitů'''
+    def on_limit_checkbox_active(self, checkbox, value):
+        if value:
+            self.numOfCharsLimit.disabled = False
+            self.checkOfCharsLimit.disabled = False
+            self.numOfWordsLimit.disabled = False
+            self.checkOfWordsLimit.disabled = False
+        else:
+            self.checkOfCharsLimit.active = False
+            self.checkOfWordsLimit.active = False
+
+            self.numOfCharsLimit.disabled = True
+            self.checkOfCharsLimit.disabled = True
+            self.numOfWordsLimit.disabled = True
+            self.checkOfWordsLimit.disabled = True
+    def on_limit_select(self, checkbox, value):
+        if value:
+            if checkbox.group == 'charsLimits':
+                self.checkOfWordsLimit.disabled = True
+                self.numOfWordsLimit.disabled = True
+            elif checkbox.group == 'wordsLimits':
+                self.checkOfCharsLimit.disabled = True
+                self.numOfCharsLimit.disabled = True
+        else:
+            self.checkOfCharsLimit.disabled = False
+            self.numOfCharsLimit.disabled = False
+            self.checkOfWordsLimit.disabled = False
+            self.numOfWordsLimit.disabled = False
+    def on_generate_submit(self, instance):
+        pass
+        #TODO vybere a zkontroluje všechy data a odešle request
