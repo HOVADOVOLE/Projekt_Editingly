@@ -29,6 +29,7 @@ from kivy.uix.gridlayout import GridLayout
 from dropdown import ComboBox
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.textinput import TextInput
+from kivy.uix.filechooser import FileChooserIconView
 
 class SidePanel(Widget):
     '''A panel widget that attach to a side of the screen
@@ -276,6 +277,7 @@ class SidePanel(BoxLayout):
         Builder.load_file('sidepanel.kv')
         super().__init__(**kwargs)
 
+        self.video_source = None
         self.left_layout = left_layout
         self.size_hint = (None, 0.97)
         self.width = 90
@@ -368,26 +370,31 @@ class GenerateSubtitlePopup(FloatLayout):
         self.size = (400, 400)
         self.anchor_x = 'center'
         self.anchor_y = 'center'
+        self.atributes = {}
         #self.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
         main_grid = GridLayout(cols=1, rows=3, size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
 
         grid = GridLayout(cols=2, rows=4, size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
 
         grid.add_widget(Label(text='Language of audio:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        grid.add_widget(ComboBox(options=['English', 'Czech', 'Russian'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        self.language_combobox = ComboBox(options=['English', 'Czech', 'Russian'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        grid.add_widget(self.language_combobox)
 
         grid.add_widget(Label(text='Format of subtitles:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        grid.add_widget(ComboBox(options=['SubRip (.srt)', 'Text file (.txt)', 'Adobe Premiere Pro (.xml)'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        self.format_combobox = ComboBox(options=['SubRip (.srt)', 'Text file (.txt)', 'Adobe Premiere Pro (.xml)'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        grid.add_widget(self.format_combobox)
 
-        grid.add_widget(Label(text='Audio / Video file:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        grid.add_widget(Button(text='Choose file', size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        grid.add_widget(Label(text='Audio / Video file:', size_hint=(1, 0.1), pos_hint={'top': 1}))
+        file_button = Button(text='Choose file', size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        file_button.bind(on_press=self.on_button_file)
+        grid.add_widget(file_button)
 
         grid.add_widget(Label(text='Limits:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        limits = CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}, active=False)
-        limits.bind(active=partial(self.on_limit_checkbox_active))
-        grid.add_widget(limits)
+        self.limits = CheckBox(size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}, active=False)
+        self.limits.bind(active=partial(self.on_limit_checkbox_active))
+        grid.add_widget(self.limits)
 
-        #--------------------
+        #-----------------------------------------------------------------------
 
         grid_two = GridLayout(cols=3, rows=2, size_hint=(1, None), pos_hint={'center_x': 0.5, 'center_y': 0.5})
         grid_two.add_widget(Label(text='Max. number of characters:', size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
@@ -408,11 +415,28 @@ class GenerateSubtitlePopup(FloatLayout):
         main_grid.add_widget(grid_two)
         flex = FloatLayout(size_hint=(1, None), pos_hint={'center_x': 0.5, 'bottom': 0.95})
         generate = Button(text='Generate', size=(100, 50), size_hint=(None, None), pos_hint={'center_x': 0.5, 'center_y': 0.45})
+
         generate.bind(on_press=self.on_generate_submit)
         flex.add_widget(generate)
 
         main_grid.add_widget(flex)
         self.add_widget(main_grid)
+    def on_button_file(self, instance):
+        self.open_file_manager()
+
+    def on_select_file(self, instance, selection, *args):
+        if selection:
+            self.video_source = selection[0]
+            self.popup_file_manager.dismiss()
+            print(self.video_source)
+    def open_file_manager(self):
+        file_chooser = FileChooserIconView(path='', filters=['*.mp3', '*.wav', '*.ogg', '*.mp4', '*.avi', '*.mkv', '*.mov', '*.wmv'])
+        file_chooser.bind(on_submit=self.on_select_file)
+        file_chooser.bind(on_cancel=self.close_file_manager)
+        self.popup_file_manager = Popup(title='Vyberte video', content=file_chooser, size_hint=(0.9, 0.9))
+        self.popup_file_manager.open()
+    def close_file_manager(self, instance):
+        self.popup_file_manager.dismiss()
 
     '''Kontroluje, jestli je zaškrtnutý checkbox pro aktivování limitů'''
     def on_limit_checkbox_active(self, checkbox, value):
@@ -442,6 +466,23 @@ class GenerateSubtitlePopup(FloatLayout):
             self.numOfCharsLimit.disabled = False
             self.checkOfWordsLimit.disabled = False
             self.numOfWordsLimit.disabled = False
+    def get_attributes(self):
+        if self.language_combobox.select != '' and self.format_combobox.select != '' and self.video_source is not None:
+            self.atributes['language'] = self.language_combobox.select
+            self.atributes['format'] = self.format_combobox.select
+            self.atributes['video_source'] = self.video_source
+    def parse_inputs_to_num(self):
+        if self.limits.active:
+            try:
+                if self.checkOfCharsLimit.active:
+                    self.atributes['chars_limit'] = int(self.numOfCharsLimit.text)
+                elif self.checkOfWordsLimit.active:
+                    self.atributes['words_limit'] = int(self.numOfWordsLimit.text)
+            except ValueError:
+                print("Neplatný vstup")
     def on_generate_submit(self, instance):
-        pass
+        self.atributes = {}
+        self.get_attributes()
+        self.parse_inputs_to_num()
+        print(self.atributes)
         #TODO vybere a zkontroluje všechy data a odešle request
