@@ -30,6 +30,7 @@ from dropdown import ComboBox
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.textinput import TextInput
 from kivy.uix.filechooser import FileChooserIconView
+from generate_subtitles import Generate
 
 class SidePanel(Widget):
     '''A panel widget that attach to a side of the screen
@@ -467,7 +468,7 @@ class GenerateSubtitlePopup(FloatLayout):
             self.checkOfWordsLimit.disabled = False
             self.numOfWordsLimit.disabled = False
     def get_attributes(self):
-        if self.language_combobox.select != '' and self.format_combobox.select != '' and self.video_source is not None:
+        if self.language_combobox.select != '' and self.format_combobox.select != '':
             self.atributes['language'] = self.language_combobox.select
             self.atributes['format'] = self.format_combobox.select
             self.atributes['video_source'] = self.video_source
@@ -485,4 +486,7 @@ class GenerateSubtitlePopup(FloatLayout):
         self.get_attributes()
         self.parse_inputs_to_num()
         print(self.atributes)
+
+        generate = Generate(self.atributes['video_source'], self.atributes['language'])
+        generate.generate_subtitles()
         #TODO vybere a zkontroluje všechy data a odešle request
