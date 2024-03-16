@@ -1,24 +1,19 @@
-import speech_recognition as sr
-from moviepy.editor import *
+import time
+import math
+import ffmpeg
 
-class Generate:
-    # Titulky se budou ukládat do složky, kde je video_source
-    def __init__ (self, video_source, language):
-        video = VideoFileClip(video_source)
-        audio = video.audio
-        audio.write_audiofile("temp_audio.wav")
-        self.video_source = video_source
-        self.language = language
-        self.r = sr.Recognizer()
-    def generate_subtitles(self):
-        if self.video_source is not None:
-            with sr.AudioFile("temp_audio.wav") as source:
-                audio_data = self.r.record(source)
+from faster_whisper import WhisperModel
 
-                try:
-                    text = self.r.recognize_google_cloud(audio_data, language="en-US")
-                    print("text", text)
-                except sr.UnknownValueError:
-                    print("Rozpoznání nebylo možné")
-                except sr.RequestError as e:
-                    print("Chyba při komunikaci s Google Cloud Speech-to-Text service: {0}".format(e))
+input_video = "input.mp4"
+input_video_name = input_video.replace(".mp4", "")
+
+def extract_audio():
+    extracted_audio = f"audio-{input_video_name}.wav"
+    stream = ffmpeg.input(input_video)
+    stream = ffmpeg.output(stream, extracted_audio)
+    ffmpeg.run(stream, overwrite_output=True)
+    return extracted_audio
+
+def run():
+    extracted_audio = extract_audio()
+run()
