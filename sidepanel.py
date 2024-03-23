@@ -366,6 +366,7 @@ class SidePanel(BoxLayout):
 class GenerateSubtitlePopup(FloatLayout):
     def __init__(self):
         super().__init__()
+        self.generate = Generate()
         self.size_hint = (1, 1)
         self.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
         self.size = (400, 400)
@@ -486,7 +487,7 @@ class GenerateSubtitlePopup(FloatLayout):
         self.get_attributes()
         self.parse_inputs_to_num()
         print(self.atributes)
-
-        generate = Generate(self.atributes['video_source'], self.atributes['language'])
-        generate.generate_subtitles()
-        #TODO vybere a zkontroluje všechy data a odešle request
+        #self.atributes['video_source']
+        print(self.atributes['video_source'])
+        extracted_audio = self.generate.extract_audio(rf"{self.atributes['video_source']}")
+        self.generate.transcribe(extracted_audio)
