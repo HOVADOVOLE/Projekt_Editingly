@@ -490,4 +490,4 @@ class GenerateSubtitlePopup(FloatLayout):
         #self.atributes['video_source']
         print(self.atributes['video_source'])
         extracted_audio = self.generate.extract_audio(rf"{self.atributes['video_source']}")
-        self.generate.transcribe(extracted_audio)
+        language, text = self.generate.transcribe(extracted_audio)

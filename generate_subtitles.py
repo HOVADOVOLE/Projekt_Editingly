@@ -19,18 +19,11 @@ class Generate:
         ffmpeg.run(stream, overwrite_output=True)
 
         return extracted_audio
-    def split_by_limit(self, is_limited, is_by_words, text):
-        if is_limited:
-            # Je omezeno pomocí počtu slov
-            if is_by_words:
-                self.split_by_words(text, 10)
-            # Je omezeno pomocí počtu charakterů
-            else:
-                self.split_by_characters(text, 10, 3)
+
     def split_by_words(self, segments, max_words):
         audio = []
         for segment in segments:
-            segment_text = segment.text  # Získání textového obsahu segmentu
+            segment_text = segment  # Předpokládáme, že 'segments' je seznam textových segmentů
             words = segment_text.split()  # Rozdělení textu na slova
             splitted_text = []
             current_part = []
@@ -48,38 +41,37 @@ class Generate:
             if current_part:
                 splitted_text.append(" ".join(current_part))
             audio.extend(splitted_text)  # Rozšíření seznamu audio o rozdělený segment
-        #return audio
-        #TODO pak mi musí vracet text (Audio proměnná)
-        print("Audio", audio)
+        return audio
+
     def split_by_characters(self, segments, max_characters, tolerance):
         audio = []
         for segment in segments:
-            segment_text = segment.text  # Získání textového obsahu segmentu
-            splitted_text = []
-            current_part = ""
-            current_word = ""
-            current_word_length = 0
+            segment_text = segment.strip()
+            if len(segment_text) > max_characters:
+                # Rozdělení segmentu na části podle maximální délky s ohledem na tolerance pro celá slova
+                current_part = ""
+                words = segment_text.split()
+                for word in words:
+                    if len(current_part) + len(word) <= max_characters:
+                        current_part += " " + word if current_part else word
+                    else:
+                        audio.append(current_part.strip())
+                        current_part = word
+                if current_part:
+                    audio.append(current_part.strip())
+            else:
+                audio.append(segment_text)
+        print(audio)
+        # return audio
 
-            for char in segment_text:
-                current_part += char
-                current_word += char
-                current_word_length += 1
-
-                if char == " ":
-                    current_word = ""
-                    current_word_length = 0
-
-                if current_word_length > max_characters:
-                    if len(current_word) <= tolerance:  # Tolerance pro slova uprostřed
-                        splitted_text.append(current_part[:-current_word_length])
-                        current_part = current_word
-                        current_word_length = len(current_word)
-
-            if current_part:
-                splitted_text.append(current_part)
-            audio.extend(splitted_text)  # Rozšíření seznamu audio o rozdělený segment
-        #return audio
-        print("Audio pomocí max char", audio)
+    def split_by_limit(self, is_limited, is_by_words, text):
+        if is_limited:
+            # Je omezeno pomocí počtu slov
+            if is_by_words:
+                return self.split_by_words(text, 10)
+            # Je omezeno pomocí počtu charakterů
+            else:
+                return self.split_by_characters(text, 20, 7)
 
     def transcribe(self, audio_file, max_per_subtitle=10):
         model = WhisperModel("small")
@@ -87,14 +79,6 @@ class Generate:
         language = info[0]
         print("Transcription language:", language)
         segments = list(segments)
-        self.split_by_limit(True, False, segments)
-        #for segment in segments:
-        #    print("[%.2fs -> %.2fs] %s" %
-        #          (segment.start, segment.end, segment.text))
-
-        # Rozdělení textu na části s maximálním počtem slov na titulku
-        #for segment in segments:
-        #    segment.splitted_text = self.split_text(segment.text, max_words_per_subtitle)
-        #    print(segment.splitted_text)
-
+        segments_text = [segment.text for segment in segments]  # Získání textového obsahu všech segmentů
+        self.split_by_limit(True, False, segments_text)  # Opravené volání metody s textovým obsahem segmentů
         return language, segments
