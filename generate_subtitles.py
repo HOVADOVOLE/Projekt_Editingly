@@ -26,7 +26,7 @@ class Generate:
                 self.split_by_words(text, 10)
             # Je omezeno pomocí počtu charakterů
             else:
-                return False
+                self.split_by_characters(text, 10, 3)
     def split_by_words(self, segments, max_words):
         audio = []
         for segment in segments:
@@ -51,6 +51,35 @@ class Generate:
         #return audio
         #TODO pak mi musí vracet text (Audio proměnná)
         print("Audio", audio)
+    def split_by_characters(self, segments, max_characters, tolerance):
+        audio = []
+        for segment in segments:
+            segment_text = segment.text  # Získání textového obsahu segmentu
+            splitted_text = []
+            current_part = ""
+            current_word = ""
+            current_word_length = 0
+
+            for char in segment_text:
+                current_part += char
+                current_word += char
+                current_word_length += 1
+
+                if char == " ":
+                    current_word = ""
+                    current_word_length = 0
+
+                if current_word_length > max_characters:
+                    if len(current_word) <= tolerance:  # Tolerance pro slova uprostřed
+                        splitted_text.append(current_part[:-current_word_length])
+                        current_part = current_word
+                        current_word_length = len(current_word)
+
+            if current_part:
+                splitted_text.append(current_part)
+            audio.extend(splitted_text)  # Rozšíření seznamu audio o rozdělený segment
+        #return audio
+        print("Audio pomocí max char", audio)
 
     def transcribe(self, audio_file, max_per_subtitle=10):
         model = WhisperModel("small")
@@ -58,7 +87,7 @@ class Generate:
         language = info[0]
         print("Transcription language:", language)
         segments = list(segments)
-        self.split_by_limit(True, True, segments)
+        self.split_by_limit(True, False, segments)
         #for segment in segments:
         #    print("[%.2fs -> %.2fs] %s" %
         #          (segment.start, segment.end, segment.text))
