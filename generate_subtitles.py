@@ -41,6 +41,7 @@ class Generate:
             if current_part:
                 splitted_text.append(" ".join(current_part))
             audio.extend(splitted_text)  # Rozšíření seznamu audio o rozdělený segment
+        print(audio)
         return audio
 
     def split_by_characters(self, segments, max_characters, tolerance):
@@ -62,23 +63,24 @@ class Generate:
             else:
                 audio.append(segment_text)
         print(audio)
-        # return audio
+        return audio
 
-    def split_by_limit(self, is_limited, is_by_words, text):
+    def split_by_limit(self, is_limited, is_by_words, text, max = 0):
         if is_limited:
             # Je omezeno pomocí počtu slov
             if is_by_words:
-                return self.split_by_words(text, 10)
+                self.split_by_words(text, max)
             # Je omezeno pomocí počtu charakterů
             else:
-                return self.split_by_characters(text, 20, 7)
+                self.split_by_characters(text, max, 7)
 
-    def transcribe(self, audio_file, max_per_subtitle=10):
+    def transcribe(self, audio_file, is_limited, is_by_words, max_per_subtitle):
         model = WhisperModel("small")
         segments, info = model.transcribe(audio_file)
-        language = info[0]
-        print("Transcription language:", language)
+
         segments = list(segments)
-        segments_text = [segment.text for segment in segments]  # Získání textového obsahu všech segmentů
-        self.split_by_limit(True, False, segments_text)  # Opravené volání metody s textovým obsahem segmentů
-        return language, segments
+        segments_text = [segment.text for segment in segments]
+
+        self.split_by_limit(is_limited, is_by_words, segments_text, max_per_subtitle)
+
+        return segments

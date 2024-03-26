@@ -378,9 +378,9 @@ class GenerateSubtitlePopup(FloatLayout):
 
         grid = GridLayout(cols=2, rows=4, size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
 
-        grid.add_widget(Label(text='Language of audio:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        self.language_combobox = ComboBox(options=['English', 'Czech', 'Russian'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
-        grid.add_widget(self.language_combobox)
+        #grid.add_widget(Label(text='Language of audio:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
+        #self.language_combobox = ComboBox(options=['English', 'Czech', 'Russian'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        #grid.add_widget(self.language_combobox)
 
         grid.add_widget(Label(text='Format of subtitles:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
         self.format_combobox = ComboBox(options=['SubRip (.srt)', 'Text file (.txt)', 'Adobe Premiere Pro (.xml)'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
@@ -469,10 +469,12 @@ class GenerateSubtitlePopup(FloatLayout):
             self.checkOfWordsLimit.disabled = False
             self.numOfWordsLimit.disabled = False
     def get_attributes(self):
-        if self.language_combobox.select != '' and self.format_combobox.select != '':
-            self.atributes['language'] = self.language_combobox.select
+        if self.format_combobox.select != '':
+            # self.language_combobox.select != ''
+            #self.atributes['language'] = self.language_combobox.select
             self.atributes['format'] = self.format_combobox.select
             self.atributes['video_source'] = self.video_source
+            self.atributes['is_limited'] = self.limits.active
     def parse_inputs_to_num(self):
         if self.limits.active:
             try:
@@ -488,6 +490,18 @@ class GenerateSubtitlePopup(FloatLayout):
         self.parse_inputs_to_num()
         print(self.atributes)
         #self.atributes['video_source']
+
         print(self.atributes['video_source'])
         extracted_audio = self.generate.extract_audio(rf"{self.atributes['video_source']}")
-        language, text = self.generate.transcribe(extracted_audio)
+
+        self.text = ""
+
+        if self.atributes['is_limited']:
+            if 'chars_limit' in self.atributes:
+                self.text = self.generate.transcribe(extracted_audio, True, False, self.atributes['chars_limit'])
+            else:
+                self.text = self.generate.transcribe(extracted_audio, True, True, self.atributes['words_limit'])
+        else:
+            print("no limit")
+            self.text = self.generate.transcribe(extracted_audio, False, False, 0)
+        #print("audio", self.text)
