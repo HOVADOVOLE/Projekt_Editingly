@@ -1,6 +1,7 @@
 import time
 import ffmpeg
 from faster_whisper import WhisperModel
+from concurrent.futures import ThreadPoolExecutor
 
 class Generate:
     _instance = None
@@ -23,8 +24,8 @@ class Generate:
     def split_by_words(self, segments, max_words):
         audio = []
         for segment in segments:
-            segment_text = segment  # Předpokládáme, že 'segments' je seznam textových segmentů
-            words = segment_text.split()  # Rozdělení textu na slova
+            segment_text = segment
+            words = segment_text.split()
             splitted_text = []
             current_part = []
             word_count = 0
@@ -40,7 +41,7 @@ class Generate:
 
             if current_part:
                 splitted_text.append(" ".join(current_part))
-            audio.extend(splitted_text)  # Rozšíření seznamu audio o rozdělený segment
+            audio.extend(splitted_text)
         print(audio)
         return audio
 
@@ -69,10 +70,10 @@ class Generate:
         if is_limited:
             # Je omezeno pomocí počtu slov
             if is_by_words:
-                self.split_by_words(text, max)
+                return self.split_by_words(text, max)
             # Je omezeno pomocí počtu charakterů
             else:
-                self.split_by_characters(text, max, 7)
+                return self.split_by_characters(text, max, 7)
 
     def transcribe(self, audio_file, is_limited, is_by_words, max_per_subtitle):
         model = WhisperModel("small")
@@ -81,6 +82,8 @@ class Generate:
         segments = list(segments)
         segments_text = [segment.text for segment in segments]
 
-        self.split_by_limit(is_limited, is_by_words, segments_text, max_per_subtitle)
+        with ThreadPoolExecutor() as executor:
+            future = executor.submit(self.split_by_limit, is_limited, is_by_words, segments_text, max_per_subtitle)
+            result = future.result()
 
-        return segments
+        return segments, result
