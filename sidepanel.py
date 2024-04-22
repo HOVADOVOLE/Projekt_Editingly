@@ -31,6 +31,7 @@ from kivy.uix.checkbox import CheckBox
 from kivy.uix.textinput import TextInput
 from kivy.uix.filechooser import FileChooserIconView
 from generate_subtitles import Generate
+from title_manager import title_manager
 
 class SidePanel(Widget):
     '''A panel widget that attach to a side of the screen
@@ -283,6 +284,7 @@ class SidePanel(BoxLayout):
         self.size_hint = (None, 0.97)
         self.width = 90
         self.pos_hint = {"right": 1, "bottom": 1}
+        self.title_manager = title_manager()
 
         self.visible = False # určuje, jestli je sidepanel otevřený, a nebo zavřený
 

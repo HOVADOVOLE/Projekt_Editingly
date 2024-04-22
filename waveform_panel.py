@@ -12,6 +12,7 @@ from kivy.clock import Clock
 from kivy.uix.button import Button
 from subtitle_handler import Subtitle_Handler
 from moviepy.editor import VideoFileClip
+import time
 
 Builder.load_file('waveform.kv')
 
@@ -34,8 +35,6 @@ class Waveform(BoxLayout):
         self.popup = None
 
         self.selected_sector = None
-
-        Clock.schedule_interval(self.clock_handler, 0.1)
 
         self.ids.canvas_box.bind(on_touch_down=self.stisk)
         self.ids.canvas_box.bind(on_touch_up=self.pusteni)
@@ -321,17 +320,15 @@ class Waveform(BoxLayout):
         try:
             for segment in segmenty:
                 print(segment[1], segment[2], type(segment[1]), type(segment[2]))
-                #self.title_manager.create_subtitle_section(segment[1], segment[2])
                 self.sections.append([self.time_to_position(segment[1]), self.time_to_position(segment[2]), False])
+            self.title_manager.subtitles = segmenty
         except Exception as e:
             print(f"Error: {e}")
-        print(self.sections)
+        self.title_manager.load_table = True
 
     def time_to_position(self, time):
         start_pos = self.ids.canvas_box.x
-        end_pos = self.ids.canvas_box.x + self.ids.canvas_box.width
-        pozice = self.ids.canvas_box.width * time / self.file_handler.get_max_value() + start_pos
-        return pozice
+        return self.ids.canvas_box.width * time / self.file_handler.get_max_value() + start_pos
     def get_video_length(self, video_path):
         try:
             clip = VideoFileClip(video_path)

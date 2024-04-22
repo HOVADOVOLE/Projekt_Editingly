@@ -32,7 +32,7 @@ class InteractiveTable(RelativeLayout):
         self.add_widget(self.data_table)
         self.add_widget(self.modify_box)
 
-        Clock.schedule_interval(self.clock_action_handler, 0.2)
+        Clock.schedule_interval(self.clock_action_handler, 0.1)
 
         self.popup = Popup(title='Error', content=Label(text='Error in entered data'), size_hint=(None, None), size=(400, 400), auto_dismiss=True)
     def update_values(self, *args):
@@ -101,7 +101,7 @@ class InteractiveTable(RelativeLayout):
         self.button_box.add_widget(delete)
         self.modify_box.add_widget(self.button_box)
     def add_row(self, start, end, text) -> None:
-        self.data_table.add_row((str(len(self.data_table.row_data)+1), start, end, "text"))
+        self.data_table.add_row((str(len(self.data_table.row_data)+1), start, end, text))
         start = round(start, 2)
         end = round(end, 2)
         self.subtitle_handler.add_subtitle(start, end, text)
@@ -116,8 +116,10 @@ class InteractiveTable(RelativeLayout):
     def clock_action_handler(self, *args):
         self.check_update_table()
         self.check_delete_row()
+        self.load_table()
     def check_update_table(self):
         if self.title_manager.get_add_row():
+            print("Adding row")
             self.title_manager.start_time = round(self.title_manager.start_time, 2)
             self.title_manager.end_time = round(self.title_manager.end_time, 2)
             #self.subtitle_handler.add_subtitle(self.title_manager.start_time, self.title_manager.end_time, self.title_manager.text)
@@ -127,3 +129,10 @@ class InteractiveTable(RelativeLayout):
             self.remove_row(self.title_manager.index_to_remove)
             self.title_manager.remove_row_statement = False
             self.title_manager.index_to_remove = None
+    def load_table(self):
+        if self.title_manager.load_table:
+            print("dalsd", len(self.title_manager.subtitles))
+            for subtitle in self.title_manager.subtitles:
+                #print(subtitle)
+               self.add_row(subtitle[1], subtitle[2], subtitle[0])
+            self.title_manager.load_table = False

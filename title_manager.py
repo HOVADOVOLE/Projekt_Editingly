@@ -13,6 +13,8 @@ class title_manager:
             cls._instance.remove_row_statement = False
             cls._instance.index_to_remove = 0
             cls._instance.max_video_position = 0
+            cls._instance.subtitles = []
+            cls._instance.load_table = False
         return cls._instance
     def create_subtitle_section(self, start_time, end_time):
         #print("Creating subtitle section\n", start_time, end_time, self.max_video_position, self.waveform_width)
@@ -21,7 +23,6 @@ class title_manager:
         self.end_time = self.max_video_position * (end_time - 435) / self.waveform_width
 
         self.add_row = True
-
     def get_add_row(self):
         return self.add_row
     def get_remove_row(self):
