@@ -1,3 +1,5 @@
+import os
+os.environ["KIVY_VIDEO"] = "ffpyplayer"
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.floatlayout import FloatLayout
