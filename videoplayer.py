@@ -82,7 +82,6 @@ class VideoPlayerApp(BoxLayout):
     def update_slider_position(self, instance, value):
         self.file_handler.set_video_position(value)
         self.file_handler.set_max_value(self.video.duration)
-        print("updated")
     def update_rectangle(self, instance, value):
         self.rect.pos = self.pos
         self.rect.size = self.size

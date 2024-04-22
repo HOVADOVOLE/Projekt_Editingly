@@ -15,11 +15,11 @@ class title_manager:
             cls._instance.max_video_position = 0
         return cls._instance
     def create_subtitle_section(self, start_time, end_time):
+        #print("Creating subtitle section\n", start_time, end_time, self.max_video_position, self.waveform_width)
         # Přepočítání časů na základě pozice na čas z widgetu VideoPlayer
         self.start_time = self.max_video_position * (start_time - 500) / self.waveform_width
         self.end_time = self.max_video_position * (end_time - 435) / self.waveform_width
 
-        # Nastavení příznaku pro přidání řádku (pokud je to vaše požadované chování)
         self.add_row = True
 
     def get_add_row(self):

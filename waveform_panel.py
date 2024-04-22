@@ -39,6 +39,7 @@ class Waveform(BoxLayout):
 
         self.ids.canvas_box.bind(on_touch_down=self.stisk)
         self.ids.canvas_box.bind(on_touch_up=self.pusteni)
+        self.title_manager.waveform_width = self.ids.canvas_box.width
 
         if self.file_handler.get_source() is not None:
             source = self.file_handler.get_source()
@@ -310,17 +311,27 @@ class Waveform(BoxLayout):
                 self.create_wave()
     def generate_from_generator(self, segmenty):
         self.file_handler.set_max_value(self.get_video_length(self.file_handler.get_source()))
+        self.title_manager.max_video_position = self.file_handler.get_max_value()
         print("délka mého pelete", self.file_handler.get_max_value())
         self.recalculate_time_to_position(segmenty)
 
     def recalculate_time_to_position(self, segmenty):
         self.sections = []
-        for segment in segmenty:
-            self.sections.append([self.time_to_position(segment[1]), self.time_to_position(segment[2]), False])
+        print(self.ids.canvas_box.x, self.ids.canvas_box.size)
+        try:
+            for segment in segmenty:
+                print(segment[1], segment[2], type(segment[1]), type(segment[2]))
+                #self.title_manager.create_subtitle_section(segment[1], segment[2])
+                self.sections.append([self.time_to_position(segment[1]), self.time_to_position(segment[2]), False])
+        except Exception as e:
+            print(f"Error: {e}")
         print(self.sections)
 
     def time_to_position(self, time):
-        return time * self.ids.canvas_box.width / self.file_handler.get_max_value()
+        start_pos = self.ids.canvas_box.x
+        end_pos = self.ids.canvas_box.x + self.ids.canvas_box.width
+        pozice = self.ids.canvas_box.width * time / self.file_handler.get_max_value() + start_pos
+        return pozice
     def get_video_length(self, video_path):
         try:
             clip = VideoFileClip(video_path)
