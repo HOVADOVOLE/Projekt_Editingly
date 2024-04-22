@@ -273,7 +273,7 @@ class SidePanel(Widget):
         return super(SidePanel, self).on_touch_up(touch)
 
 class SidePanel(BoxLayout):
-
+    waveform_instance = Waveform()
     def __init__(self, left_layout, **kwargs):
         Builder.load_file('sidepanel.kv')
         super().__init__(**kwargs)
@@ -288,8 +288,8 @@ class SidePanel(BoxLayout):
 
         # Funkcionalita pro zobrazení waveform panelu
         self.waveform_visible = True
-        self.waveform_instance = Waveform()
-        self.left_layout.add_widget(self.waveform_instance)
+        #self.waveform_instance = Waveform()
+        self.left_layout.add_widget(SidePanel.waveform_instance)
 
         # Funkcionalita pro zobrazení video přehrávače
         self.videoplayer_visible = True
@@ -352,12 +352,12 @@ class SidePanel(BoxLayout):
             self.videoplayer_visible = True
     def toggle_waveform(self):
         if self.waveform_visible:
-            self.left_layout.remove_widget(self.waveform_instance)
-            self.waveform_instance = None
+            self.left_layout.remove_widget(SidePanel.waveform_instance)
+            SidePanel.waveform_instance = None
             self.waveform_visible = False
         else:
-            self.waveform_instance = Waveform()
-            self.left_layout.add_widget(self.waveform_instance)
+            SidePanel.waveform_instance = Waveform()
+            self.left_layout.add_widget(SidePanel.waveform_instance)
             self.waveform_visible = True
 
     def help(self):
@@ -491,7 +491,6 @@ class GenerateSubtitlePopup(FloatLayout):
         self.parse_inputs_to_num()
         print(self.atributes)
         self.file_handler.set_source(self.atributes['video_source'])
-        #self.atributes['video_source']
 
         extracted_audio = self.generate.extract_audio(rf"{self.atributes['video_source']}")
 
@@ -504,4 +503,5 @@ class GenerateSubtitlePopup(FloatLayout):
                 self.segments = self.generate.transcribe(extracted_audio, True, True, self.atributes['words_limit'])
         else:
             self.segments = self.generate.transcribe(extracted_audio, False, False, 0)
-        print("audio", self.segments)
+
+        SidePanel.waveform_instance.generate_from_generator(self.segments)

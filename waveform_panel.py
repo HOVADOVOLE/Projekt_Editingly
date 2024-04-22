@@ -11,6 +11,7 @@ from title_manager import title_manager
 from kivy.clock import Clock
 from kivy.uix.button import Button
 from subtitle_handler import Subtitle_Handler
+from moviepy.editor import VideoFileClip
 
 Builder.load_file('waveform.kv')
 
@@ -307,3 +308,25 @@ class Waveform(BoxLayout):
                 source = self.file_handler.get_source()
                 self.audio_source = AudioSegment.from_file(source)
                 self.create_wave()
+    def generate_from_generator(self, segmenty):
+        self.file_handler.set_max_value(self.get_video_length(self.file_handler.get_source()))
+        print("délka mého pelete", self.file_handler.get_max_value())
+        self.recalculate_time_to_position(segmenty)
+
+    def recalculate_time_to_position(self, segmenty):
+        self.sections = []
+        for segment in segmenty:
+            self.sections.append([self.time_to_position(segment[1]), self.time_to_position(segment[2]), False])
+        print(self.sections)
+
+    def time_to_position(self, time):
+        return time * self.ids.canvas_box.width / self.file_handler.get_max_value()
+    def get_video_length(self, video_path):
+        try:
+            clip = VideoFileClip(video_path)
+            duration = clip.duration
+            clip.close()
+            return duration
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
