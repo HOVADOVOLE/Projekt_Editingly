@@ -32,6 +32,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.filechooser import FileChooserIconView
 from generate_subtitles import Generate
 from title_manager import title_manager
+from subtitle_handler import Subtitle_Handler
 
 class SidePanel(Widget):
     '''A panel widget that attach to a side of the screen
@@ -285,6 +286,7 @@ class SidePanel(BoxLayout):
         self.width = 90
         self.pos_hint = {"right": 1, "bottom": 1}
         self.title_manager = title_manager()
+        self.subtitle_handler = Subtitle_Handler()
 
         self.visible = False # určuje, jestli je sidepanel otevřený, a nebo zavřený
 
@@ -376,6 +378,7 @@ class GenerateSubtitlePopup(FloatLayout):
         self.anchor_x = 'center'
         self.anchor_y = 'center'
         self.atributes = {}
+        self.subtitle_handler = Subtitle_Handler()
         #self.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
         main_grid = GridLayout(cols=1, rows=3, size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
 
@@ -507,3 +510,9 @@ class GenerateSubtitlePopup(FloatLayout):
             self.segments = self.generate.transcribe(extracted_audio, False, False, 0)
 
         SidePanel.waveform_instance.generate_from_generator(self.segments)
+
+    def convert_to_subtitle_list(self):
+        subtitles = []
+        for segment in self.segments:
+            subtitles.append({'start': segment[1], 'end': segment[2], 'text': segment[0]})
+        self.subtitle_handler.subtitle_list = subtitles

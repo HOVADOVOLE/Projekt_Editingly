@@ -16,7 +16,7 @@ class Subtitle_Handler:
     def add_subtitle(self, od, do, text):
         if text is None:
             text = ""
-        self.subtitle_list.append({'start': od, 'end': do, 'text': "text"})
+        self.subtitle_list.append({'start': od, 'end': do, 'text': text})
     def modify_subtitle(self, id_radku, od, do, text):
         if text is None:
             text = ""
@@ -26,11 +26,11 @@ class Subtitle_Handler:
         self.subtitle_list.pop(id_titulky)
 
     def return_current_subbtitle(self, cas):
-        # ošetření na jestli nebude žádná titulka, tak aby ne nevracelo nic
         for subtitle in self.subtitle_list:
             if subtitle['start'] <= cas and subtitle['end'] >= cas:
                 self.posledni_od = subtitle['start']
                 self.posledni_do = subtitle['end']
+                print("sub", subtitle)
                 return subtitle
         return None
 
