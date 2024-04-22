@@ -2,6 +2,7 @@ import time
 import ffmpeg
 from faster_whisper import WhisperModel
 from concurrent.futures import ThreadPoolExecutor
+#from file_handler import file_handler
 
 class Generate:
     _instance = None
@@ -9,6 +10,7 @@ class Generate:
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super(Generate, cls).__new__(cls, *args, **kwargs)
+            #cls.file_handler = file_handler()
         return cls._instance
 
     def extract_audio(self, video):
@@ -51,7 +53,6 @@ class Generate:
 
             audio.extend(splitted_text)
 
-        print(audio)
         return audio
 
 
@@ -84,7 +85,6 @@ class Generate:
                     audio.append((current_part.strip(), current_start, segment_end))
             else:
                 audio.append((segment_text, segment_start, segment_end))
-        print("audio", audio)
         return audio
 
 
@@ -113,4 +113,4 @@ class Generate:
             future = executor.submit(self.split_by_limit, is_limited, is_by_words, segments_text, max_per_subtitle)
             result = future.result()
 
-        return segments, result
+        return result

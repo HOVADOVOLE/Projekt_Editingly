@@ -367,6 +367,7 @@ class GenerateSubtitlePopup(FloatLayout):
     def __init__(self):
         super().__init__()
         self.generate = Generate()
+        self.file_handler = file_handler()
         self.size_hint = (1, 1)
         self.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
         self.size = (400, 400)
@@ -489,19 +490,18 @@ class GenerateSubtitlePopup(FloatLayout):
         self.get_attributes()
         self.parse_inputs_to_num()
         print(self.atributes)
+        self.file_handler.set_source(self.atributes['video_source'])
         #self.atributes['video_source']
 
-        print(self.atributes['video_source'])
         extracted_audio = self.generate.extract_audio(rf"{self.atributes['video_source']}")
 
-        self.text = ""
+        self.segments = []
 
         if self.atributes['is_limited']:
             if 'chars_limit' in self.atributes:
-                self.text = self.generate.transcribe(extracted_audio, True, False, self.atributes['chars_limit'])
+                self.segments = self.generate.transcribe(extracted_audio, True, False, self.atributes['chars_limit'])
             else:
-                self.text = self.generate.transcribe(extracted_audio, True, True, self.atributes['words_limit'])
+                self.segments = self.generate.transcribe(extracted_audio, True, True, self.atributes['words_limit'])
         else:
-            print("no limit")
-            self.text = self.generate.transcribe(extracted_audio, False, False, 0)
-        #print("audio", self.text)
+            self.segments = self.generate.transcribe(extracted_audio, False, False, 0)
+        print("audio", self.segments)
