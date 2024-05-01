@@ -2,6 +2,7 @@ import keyboard
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
@@ -9,6 +10,7 @@ from kivy.uix.textinput import TextInput
 from kivy.clock import Clock
 from threading import Thread
 from functools import partial
+
 
 # Dictionary to store shortcuts and their corresponding actions
 shortcuts = {
@@ -66,25 +68,25 @@ def toggle_sidepanel():
 # Shortcut for saving changes
 def save_changes():
     # Save changes
-    pass
+    print("Changes saved...")
 
 # Shortcut for closing the application
 def close_application():
-    pass
+    App.get_running_app().stop()
 
 # Shortcut for opening a project
 def open_file():
-    print("Opening file")
+    print("Open file...")
 
 # Shortcut for creating a new project
 def new_project():
-    print("Creating new project")
+    print("Create new project...")
 
 # Shortcut for saving a project as
 def save_as():
-    print("Saving as")
+    print("Save as...")
 
-class ShortcutsApp(App):
+class ShortcutsPopup(FloatLayout):
     def build(self):
         layout = BoxLayout(orientation='vertical')
         grid = GridLayout(cols=2)
@@ -142,6 +144,3 @@ class ShortcutsApp(App):
             print("Shortcut", key, "changed to", new_shortcut)
         else:
             print("Shortcut already exists")
-
-if __name__ == '__main__':
-    ShortcutsApp().run()
