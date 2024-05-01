@@ -10,7 +10,7 @@ from kivy.uix.textinput import TextInput
 from kivy.clock import Clock
 from threading import Thread
 from functools import partial
-
+import sidepanel
 
 # Dictionary to store shortcuts and their corresponding actions
 shortcuts = {
@@ -58,12 +58,12 @@ def change_shortcut(old_shortcut):
 
 # Shortcut for generating subtitles
 def generate_subtitles():
-    pass
+    sidepanel.generate_subtitles()
 
 # Shortcut for toggling the side panel
 def toggle_sidepanel():
-    # Close the side panel
-    pass
+    print("Toggling side panel...")
+    sidepanel.toggle_sidepanel()
 
 # Shortcut for saving changes
 def save_changes():

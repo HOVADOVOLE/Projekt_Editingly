@@ -6,26 +6,20 @@ __all__ = ('SidePanel', )
 
 from kivy.animation import Animation
 from kivy.uix.widget import Widget
-from kivy.uix.button import Button
 from kivy.clock import Clock
 from functools import partial
 from kivy.lang import Builder
-from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
-from kivy.uix.image import Image
-from kivy.graphics import *
-from kivy.core.window import Window
-from kivy.app import App
+import sidepanel
 from waveform_panel import Waveform
 from videoplayer import VideoPlayerApp
 from table import InteractiveTable
 from file_handler import file_handler
 from kivy.uix.popup import Popup
 from kivy.uix.gridlayout import GridLayout
-#from generate_subtitle_popup import GenerateSubtitlePopup
 from dropdown import ComboBox
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.textinput import TextInput
@@ -34,6 +28,14 @@ from generate_subtitles import Generate
 from title_manager import title_manager
 from subtitle_handler import Subtitle_Handler
 
+toggle_side = False
+toggle_generate_popup = False
+def toggle_sidepanel():
+    global toggle_side
+    toggle_side = True
+def generate_subtitles():
+    global toggle_generate_popup
+    toggle_generate_popup = True
 class SidePanel(Widget):
     '''A panel widget that attach to a side of the screen
     (similar to gnome-panel for linux user).
@@ -254,6 +256,7 @@ class SidePanel(Widget):
                 self.hide()
             else:
               return
+
                       
     def on_move(self, x, y):
         self.initial_pos = x, y
@@ -276,6 +279,7 @@ class SidePanel(Widget):
 
 class SidePanel(BoxLayout):
     waveform_instance = Waveform()
+
     def __init__(self, left_layout, **kwargs):
         Builder.load_file('sidepanel.kv')
         super().__init__(**kwargs)
@@ -304,7 +308,21 @@ class SidePanel(BoxLayout):
         self.table_visible = True
         self.table_instance = InteractiveTable()
         self.left_layout.add_widget(self.table_instance)
+        Clock.schedule_interval(self.check_for_shorcuts, .3)
 
+
+    def check_for_shorcuts(self, *args):
+        print("Checking for shortcuts")
+        self.check_shortcuts()
+
+    def check_shortcuts(self):
+        print(sidepanel.toggle_side)
+        if sidepanel.toggle_side:
+            sidepanel.toggle_side = False
+            self.toggle_panel()
+        if sidepanel.toggle_generate_popup:
+            sidepanel.toggle_generate_popup = False
+            self.generate_subtitles()
     def show(self):
         anim = Animation(width=260, duration=0.15)
         anim.start(self)
