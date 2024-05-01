@@ -125,6 +125,7 @@ class ShortcutsPopup(FloatLayout):
                 Clock.schedule_once(lambda dt: self.update_text_input(input_field, event.name))
                 if event.name == 'enter':
                     self.save_new_shortcut(input_field.text)
+
                     self.popup.dismiss()
 
         keyboard.hook(on_press)
@@ -138,9 +139,13 @@ class ShortcutsPopup(FloatLayout):
     def save_new_shortcut(self, new_shortcut):
         key = self.current_key
         if new_shortcut not in shortcuts:
-            shortcuts[new_shortcut] = shortcuts.pop(key)
-            keyboard.remove_hotkey(key)
-            keyboard.add_hotkey(new_shortcut, action, args=(new_shortcut,))
-            print("Shortcut", key, "changed to", new_shortcut)
+            if key in shortcuts:
+                # Přesunutí akce z původní zkratky na novou zkratku
+                shortcuts[new_shortcut] = shortcuts.pop(key)
+                keyboard.remove_hotkey(key)
+                keyboard.add_hotkey(new_shortcut, action, args=(new_shortcut,))
+                print("Shortcut", key, "changed to", new_shortcut)
+            else:
+                print("Original shortcut does not exist")
         else:
             print("Shortcut already exists")

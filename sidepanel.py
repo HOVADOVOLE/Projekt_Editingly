@@ -312,11 +312,9 @@ class SidePanel(BoxLayout):
 
 
     def check_for_shorcuts(self, *args):
-        print("Checking for shortcuts")
         self.check_shortcuts()
 
     def check_shortcuts(self):
-        print(sidepanel.toggle_side)
         if sidepanel.toggle_side:
             sidepanel.toggle_side = False
             self.toggle_panel()
