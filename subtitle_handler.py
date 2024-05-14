@@ -30,7 +30,6 @@ class Subtitle_Handler:
             if subtitle['start'] <= cas and subtitle['end'] >= cas:
                 self.posledni_od = subtitle['start']
                 self.posledni_do = subtitle['end']
-                print("sub", subtitle)
                 return subtitle
         return None
 

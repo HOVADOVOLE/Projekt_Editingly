@@ -136,7 +136,6 @@ class SubtitleWidget(Label):
         self.color = (1, 1, 0, 1)
         self.size_hint = (0.5, 0.1)
         self.pos_hint = {"center_x": 0.5, 'top': 0.85}
-        self.text = 'Subtitle'
         self.font_size = 30
         self.color = (1, 1, 1, 1)
         self.size_hint_x = 0.6

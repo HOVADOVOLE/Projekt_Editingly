@@ -14,7 +14,7 @@ Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
 class MainApp(MDApp):
     def build(self):
-        self.title = 'Editingly - 0.0.4'
+        self.title = 'Editingly - 0.0.9'
 
         # Základní nastavení okna
         Window.maximize()

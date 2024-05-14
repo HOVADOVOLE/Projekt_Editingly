@@ -319,7 +319,6 @@ class Waveform(BoxLayout):
         print(self.ids.canvas_box.x, self.ids.canvas_box.size)
         try:
             for segment in segmenty:
-                print(segment[1], segment[2], type(segment[1]), type(segment[2]))
                 self.sections.append([self.time_to_position(segment[1]), self.time_to_position(segment[2]), False])
             self.title_manager.subtitles = segmenty
         except Exception as e:
