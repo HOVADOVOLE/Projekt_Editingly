@@ -6,6 +6,7 @@ from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
 
 class Export():
     _instance = None
@@ -22,6 +23,7 @@ class Export():
 
             cls._instance.has_path = False
             cls._instance.path = ''
+            cls._instance.file_name = ''
 
         return cls._instance
 
@@ -29,32 +31,41 @@ class Export():
         self.video_source = self.file_handler.source
         self.subtitle_list = self.subtitle_handler.subtitle_list
 
-        if not self.has_path:
+        if not self.has_path or not self.file_name:
             self.show_file_chooser()
-            self.save()
         else:
-            self.save()
-    def save(self):
-        export_path = os.path.join(self.path, 'export.json')
-        with open(export_path, 'w') as file:
-            json.dump({'subtitle_list': self.subtitle_list, 'video_source': self.video_source}, file)
+            if not self.file_name.endswith('.json'):
+                self.file_name += '.json'  # Přidání koncovky .json, pokud ji uživatel nezadá
+            export_path = os.path.join(self.path, self.file_name)
+            os.makedirs(os.path.dirname(export_path), exist_ok=True)  # Vytvoření adresáře, pokud neexistuje
+            with open(export_path, 'w') as file:
+                json.dump({'subtitle_list': self.subtitle_list, 'video_source': self.video_source}, file)
+            self.popup_file_manager.dismiss()  # Zavření dialogového okna po uložení
 
     def show_file_chooser(self):
         file_chooser = FileChooserListView(path='./')
+
+        file_name_input = TextInput(text='export')
+        file_name_input.bind(text=self.set_file_name)  # Váže textový vstup na metodu set_file_name
+
         confirm_button = Button(text='Confirm')
         confirm_button.bind(on_press=lambda instance: self.select_folder(file_chooser.path))  # Předání cesty z file_chooseru do metody select_folder
 
         layout = BoxLayout(orientation='vertical')
         layout.add_widget(file_chooser)
+        layout.add_widget(file_name_input)
         layout.add_widget(confirm_button)
 
-        self.popup_file_manager = Popup(title='Choose folder', content=layout, size_hint=(0.9, 0.9))
+        self.popup_file_manager = Popup(title='Choose folder and file name', content=layout, size_hint=(0.9, 0.9))
         self.popup_file_manager.open()
 
-    def select_folder(self, path):  # Přidání parametru path
+    def select_folder(self, path):
         self.path = path
         self.has_path = True
-        self.popup_file_manager.dismiss()
+        self.save_data()  # Opraveno volání metody save_data()
+
+    def set_file_name(self, instance, text):
+        self.file_name = text
 
     def close_file_manager(self, instance):
         self.popup_file_manager.dismiss()
