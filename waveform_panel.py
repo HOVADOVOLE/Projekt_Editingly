@@ -8,11 +8,9 @@ import numpy as np
 from kivy.core.window import Window
 from file_handler import file_handler
 from title_manager import title_manager
-from kivy.clock import Clock
 from kivy.uix.button import Button
 from subtitle_handler import Subtitle_Handler
 from moviepy.editor import VideoFileClip
-import time
 
 Builder.load_file('waveform.kv')
 
