@@ -1,11 +1,7 @@
-import os
-import json
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.label import Label
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.popup import Popup
-from kivy.app import App
+from import_controler import ImportControler
 
 class ImportProject(BoxLayout):
     def __init__(self, **kwargs):
@@ -22,7 +18,7 @@ class ImportProject(BoxLayout):
     def select_file(self, instance, selection, *args):
         if selection:
             self.selected_file = selection[0]
-            print(f"Selected file: {self.selected_file}")
+            ImportControler().check_json(self.selected_file)
             self.popup_file_manager.dismiss()
 
     def close_file_manager(self, instance):
