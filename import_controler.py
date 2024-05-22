@@ -1,6 +1,7 @@
 import json
 from subtitle_handler import Subtitle_Handler
 from file_handler import file_handler
+from sidepanel import SidePanel
 #from title_manager import title_manager
 
 class ImportControler():
@@ -11,6 +12,7 @@ class ImportControler():
 
         self.video_source = ""
         self.subtitle_list = []
+        self.convert_data: list = []
     def check_json(self, file_path):
         try:
             with open(file_path, 'r') as file:
@@ -21,7 +23,6 @@ class ImportControler():
 
                 self.video_source = data['video_source']
                 self.subtitle_list = data['subtitle_list']
-                print(self.video_source)
                 self.load_to_editor()
 
         except FileNotFoundError:
@@ -29,6 +30,9 @@ class ImportControler():
 
     def load_to_editor(self):
         self.file_handler.set_source(self.video_source)
-        self.subtitle_handler.subtitle_list = self.subtitle_list
+        converted_data = [(item['text'], float(item['start']), float(item['end'])) for item in self.subtitle_list]
+        #self.subtitle_handler.subtitle_list = converted_data
+        SidePanel.waveform_instance.generate_from_generator(converted_data)
+        print(converted_data)
         #self.title_manager.load_subtitles()
         #self.title_manager.load_video()

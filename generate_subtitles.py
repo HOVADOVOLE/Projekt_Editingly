@@ -2,7 +2,6 @@ import time
 import ffmpeg
 from faster_whisper import WhisperModel
 from concurrent.futures import ThreadPoolExecutor
-#from file_handler import file_handler
 
 class Generate:
     _instance = None
@@ -87,9 +86,6 @@ class Generate:
                 audio.append((segment_text, segment_start, segment_end))
         return audio
 
-
-
-
     def split_by_limit(self, is_limited, is_by_words, text, max = 0):
         if is_limited:
             # Je omezeno pomocí počtu slov
@@ -103,7 +99,6 @@ class Generate:
     def transcribe(self, audio_file, is_limited, is_by_words, max_per_subtitle):
         model = WhisperModel("small")
         segments, info = model.transcribe(audio_file)
-
         segments = list(segments)
         segments_text = [(segment.text, segment.start, segment.end) for segment in segments]
 

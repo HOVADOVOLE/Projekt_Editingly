@@ -309,7 +309,6 @@ class Waveform(BoxLayout):
     def generate_from_generator(self, segmenty):
         self.file_handler.set_max_value(self.get_video_length(self.file_handler.get_source()))
         self.title_manager.max_video_position = self.file_handler.get_max_value()
-        print("délka mého pelete", self.file_handler.get_max_value())
         self.recalculate_time_to_position(segmenty)
 
     def recalculate_time_to_position(self, segmenty):
@@ -331,6 +330,7 @@ class Waveform(BoxLayout):
             clip = VideoFileClip(video_path)
             duration = clip.duration
             clip.close()
+            print("Dürum", duration)
             return duration
         except Exception as e:
             print(f"Error: {e}")

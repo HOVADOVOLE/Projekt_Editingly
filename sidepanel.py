@@ -510,7 +510,7 @@ class GenerateSubtitlePopup(FloatLayout):
         self.atributes = {}
         self.get_attributes()
         self.parse_inputs_to_num()
-        print(self.atributes)
+
         self.file_handler.set_source(self.atributes['video_source'])
 
         extracted_audio = self.generate.extract_audio(rf"{self.atributes['video_source']}")
