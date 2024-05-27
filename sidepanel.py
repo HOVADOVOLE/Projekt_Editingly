@@ -400,14 +400,6 @@ class GenerateSubtitlePopup(FloatLayout):
 
         grid = GridLayout(cols=2, rows=4, size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
 
-        #grid.add_widget(Label(text='Language of audio:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        #self.language_combobox = ComboBox(options=['English', 'Czech', 'Russian'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
-        #grid.add_widget(self.language_combobox)
-
-        grid.add_widget(Label(text='Format of subtitles:', size_hint=(1, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5}))
-        self.format_combobox = ComboBox(options=['SubRip (.srt)', 'Text file (.txt)', 'Adobe Premiere Pro (.xml)'], size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
-        grid.add_widget(self.format_combobox)
-
         grid.add_widget(Label(text='Audio / Video file:', size_hint=(1, 0.1), pos_hint={'top': 1}))
         file_button = Button(text='Choose file', size_hint=(0.5, 0.1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
         file_button.bind(on_press=self.on_button_file)
@@ -491,12 +483,8 @@ class GenerateSubtitlePopup(FloatLayout):
             self.checkOfWordsLimit.disabled = False
             self.numOfWordsLimit.disabled = False
     def get_attributes(self):
-        if self.format_combobox.select != '':
-            # self.language_combobox.select != ''
-            #self.atributes['language'] = self.language_combobox.select
-            self.atributes['format'] = self.format_combobox.select
-            self.atributes['video_source'] = self.video_source
-            self.atributes['is_limited'] = self.limits.active
+        self.atributes['video_source'] = self.video_source
+        self.atributes['is_limited'] = self.limits.active
     def parse_inputs_to_num(self):
         if self.limits.active:
             try:

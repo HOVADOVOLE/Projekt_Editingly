@@ -4,6 +4,7 @@ from kivy_garden.contextmenu import ContextMenu
 from shortcuts import ShortcutsPopup
 from kivy.uix.popup import Popup
 from export import Export
+from export_subtitles import ExportSubtitles
 from import_project import ImportProject
 class TopMenu(BoxLayout):
     def __init__(self, **kwargs: object):
@@ -23,3 +24,7 @@ class TopMenu(BoxLayout):
     def open_project(self):
         self.import_project.open_import_popup()
         print("Open project...")
+    def export_subtitles(self):
+        print("Export subtitle...")
+        popup = Popup(title='Export subtitles', content=ExportSubtitles().build(), size_hint=(None, None), size=(400, 200))
+        popup.open()

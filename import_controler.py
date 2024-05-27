@@ -33,6 +33,3 @@ class ImportControler():
         converted_data = [(item['text'], float(item['start']), float(item['end'])) for item in self.subtitle_list]
         #self.subtitle_handler.subtitle_list = converted_data
         SidePanel.waveform_instance.generate_from_generator(converted_data)
-        print(converted_data)
-        #self.title_manager.load_subtitles()
-        #self.title_manager.load_video()

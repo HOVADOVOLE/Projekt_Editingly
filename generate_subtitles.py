@@ -9,7 +9,6 @@ class Generate:
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super(Generate, cls).__new__(cls, *args, **kwargs)
-            #cls.file_handler = file_handler()
         return cls._instance
 
     def extract_audio(self, video):
@@ -53,8 +52,6 @@ class Generate:
             audio.extend(splitted_text)
 
         return audio
-
-
 
     def split_by_characters(self, segments, max_characters, tolerance):
         audio = []
@@ -101,7 +98,6 @@ class Generate:
         segments, info = model.transcribe(audio_file)
         segments = list(segments)
         segments_text = [(segment.text, segment.start, segment.end) for segment in segments]
-
 
         with ThreadPoolExecutor() as executor:
             executor.max_workers = 1
