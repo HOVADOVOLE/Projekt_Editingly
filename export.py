@@ -62,7 +62,7 @@ class Export():
     def select_folder(self, path):
         self.path = path
         self.has_path = True
-        self.save_data()  # Opraveno volání metody save_data()
+        self.save_data()
 
     def set_file_name(self, instance, text):
         self.file_name = text

@@ -26,5 +26,5 @@ class TopMenu(BoxLayout):
         print("Open project...")
     def export_subtitles(self):
         print("Export subtitle...")
-        popup = Popup(title='Export subtitles', content=ExportSubtitles().build(), size_hint=(None, None), size=(400, 200))
+        popup = Popup(title='Export subtitles', content=ExportSubtitles().build(), size_hint=(None, None), size=(400, 400))
         popup.open()
