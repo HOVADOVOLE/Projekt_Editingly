@@ -6,7 +6,7 @@ from import_controler import ImportControler
 class ImportProject(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(orientation='vertical', **kwargs)
-        self.selected_file = None  # Inicializace proměnné
+        self.selected_file = None
 
     def open_import_popup(self):
         self.file_chooser = FileChooserIconView(path='./', filters=['*.json'])  # Vytvoření file chooseru s možností vybrat pouze .json soubory

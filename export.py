@@ -7,6 +7,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
+from kivy.uix.label import Label
 
 class Export():
     _instance = None
@@ -45,16 +46,25 @@ class Export():
     def show_file_chooser(self):
         file_chooser = FileChooserListView(path='./')
 
-        file_name_input = TextInput(text='export')
+        # Vytvoření widgetů
+        file_label = Label(text='Název souboru:', size_hint=(None, None), width=150, height=30)
+        file_name_input = TextInput(text='export', size_hint=(None, None), width=150, height=30)
         file_name_input.bind(text=self.set_file_name)  # Váže textový vstup na metodu set_file_name
 
-        confirm_button = Button(text='Confirm')
-        confirm_button.bind(on_press=lambda instance: self.select_folder(file_chooser.path))  # Předání cesty z file_chooseru do metody select_folder
+        confirm_button = Button(text='Confirm', size_hint=(None, None), width=100, height=30)
+        confirm_button.bind(on_press=lambda instance: self.select_folder(
+            file_chooser.path))  # Předání cesty z file_chooseru do metody select_folder
 
+        # Layout pro popisek, textový vstup a tlačítko
+        input_button_layout = BoxLayout(orientation='horizontal', size_hint=(0.5, None), height=30, pos_hint={'center_x': 0.5})
+        input_button_layout.add_widget(file_label)
+        input_button_layout.add_widget(file_name_input)
+        input_button_layout.add_widget(confirm_button)
+
+        # Hlavní vertikální layout
         layout = BoxLayout(orientation='vertical')
         layout.add_widget(file_chooser)
-        layout.add_widget(file_name_input)
-        layout.add_widget(confirm_button)
+        layout.add_widget(input_button_layout)
 
         self.popup_file_manager = Popup(title='Choose folder and file name', content=layout, size_hint=(0.9, 0.9))
         self.popup_file_manager.open()

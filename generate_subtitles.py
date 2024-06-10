@@ -100,7 +100,7 @@ class Generate:
         segments_text = [(segment.text, segment.start, segment.end) for segment in segments]
 
         with ThreadPoolExecutor() as executor:
-            executor.max_workers = 1
+            executor.max_workers = 9
             future = executor.submit(self.split_by_limit, is_limited, is_by_words, segments_text, max_per_subtitle)
             result = future.result()
 
