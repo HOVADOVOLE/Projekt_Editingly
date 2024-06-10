@@ -47,16 +47,16 @@ class Export():
         file_chooser = FileChooserListView(path='./')
 
         # Vytvoření widgetů
-        file_label = Label(text='Název souboru:', size_hint=(None, None), width=150, height=30)
-        file_name_input = TextInput(text='export', size_hint=(None, None), width=150, height=30)
+        file_label = Label(text='Název souboru:', size_hint=(None, None), width=150, height=40)
+        file_name_input = TextInput(text='export', size_hint=(None, None), width=150, height=40)
         file_name_input.bind(text=self.set_file_name)  # Váže textový vstup na metodu set_file_name
 
-        confirm_button = Button(text='Confirm', size_hint=(None, None), width=100, height=30)
+        confirm_button = Button(text='Confirm', size_hint=(None, None), width=100, height=40)
         confirm_button.bind(on_press=lambda instance: self.select_folder(
             file_chooser.path))  # Předání cesty z file_chooseru do metody select_folder
 
         # Layout pro popisek, textový vstup a tlačítko
-        input_button_layout = BoxLayout(orientation='horizontal', size_hint=(0.5, None), height=30, pos_hint={'center_x': 0.5})
+        input_button_layout = BoxLayout(orientation='horizontal', size_hint=(0.5, None), height=40, pos_hint={'center_x': 0.5})
         input_button_layout.add_widget(file_label)
         input_button_layout.add_widget(file_name_input)
         input_button_layout.add_widget(confirm_button)
