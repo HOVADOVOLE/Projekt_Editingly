@@ -341,7 +341,7 @@ class SidePanel(BoxLayout):
     def show_popup(self):
         layout = GenerateSubtitlePopup()
         print(layout.height)
-        popup = Popup(title='Generate subtitles', content=layout, size_hint=(None, None), size=(600, 400), auto_dismiss=True)
+        popup = Popup(title='Generate subtitles', content=layout, size_hint=(None, None), size=(800, 400), auto_dismiss=True)
         popup.open()
     def new_project(self):
         print("New project")

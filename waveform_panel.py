@@ -108,15 +108,15 @@ class Waveform(BoxLayout):
 
     def move_slider_backward(self):
         if self.ids.brightnessControl.value > self.ids.brightnessControl.min:
-            #self.file_handler.set_video_position(self.ids.brightnessControl.value)
+            self.file_handler.set_video_position(self.ids.brightnessControl.value)
             self.file_handler.set_cas_posun(-5)
             self.file_handler.set_posun(True)
-            #self.ids.brightnessControl.value -= 0.05 * (self.ids.brightnessControl.max - self.ids.brightnessControl.min)
+            self.ids.brightnessControl.value -= 0.05 * (self.ids.brightnessControl.max - self.ids.brightnessControl.min)
     def move_slider_forward(self):
         if self.ids.brightnessControl.value < self.ids.brightnessControl.max:
             self.file_handler.set_cas_posun(5)
             self.file_handler.set_posun(True)
-            #self.ids.brightnessControl.value += 0.05 * (self.ids.brightnessControl.max - self.ids.brightnessControl.min)
+            self.ids.brightnessControl.value += 0.05 * (self.ids.brightnessControl.max - self.ids.brightnessControl.min)
     def video_state(self):
         state = self.file_handler.get_video_play()
         if state:
@@ -330,7 +330,6 @@ class Waveform(BoxLayout):
             clip = VideoFileClip(video_path)
             duration = clip.duration
             clip.close()
-            print("Dürum", duration)
             return duration
         except Exception as e:
             print(f"Error: {e}")

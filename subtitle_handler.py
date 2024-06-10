@@ -32,23 +32,3 @@ class Subtitle_Handler:
                 self.posledni_do = subtitle['end']
                 return subtitle
         return None
-
-    #Uloží všechny titulky do JSONu pro případ zavření aplikace
-    # TODO - přidat ošetření na přepsání souboru
-    def zapis_do_json(self):
-        with open(self.path, 'w') as file:
-            json.dump(self.subtitle_list, file)
-    def print_json(self):
-        return self.subtitle_list
-    # Načte všechny titulky z JSONu pro případ znovu otevření aplikace
-    def rozbal_json(self):
-        with open(self.path, 'r') as file:
-            self.subtitle_list = json.load(file)
-
-    #def json_to_srt(self):
-    #    srt = ''
-    #    for i in range(len(self.subtitle_list)):
-    #        srt += str(i+1) + '\n'
-    #        srt += self.subtitle_list[i]['start'] + ' --> ' + self.subtitle_list[i]['end'] + '\n'
-    #        srt += self.subtitle_list[i]['text'] + '\n\n'
-    #    return srt

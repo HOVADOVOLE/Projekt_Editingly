@@ -8,7 +8,7 @@ from kivy.clock import Clock
 from kivy.uix.label import Label
 from subtitle_handler import Subtitle_Handler
 from title_manager import title_manager
-import json
+from kivy.properties import StringProperty
 class VideoPlayerApp(BoxLayout):
     def __init__(self):
         super().__init__()
@@ -131,10 +131,12 @@ class VideoPlayerApp(BoxLayout):
         self.update_slider_position(self.video.position)
 
 class SubtitleWidget(Label):
+    text = StringProperty("")
+
     def __init__(self, **kwargs):
         super(SubtitleWidget, self).__init__(**kwargs)
         self.color = (1, 1, 0, 1)
-        self.size_hint = (0.5, 0.1)
+        self.size_hint = (0.5, None)
         self.pos_hint = {"center_x": 0.5, 'top': 0.85}
         self.font_size = 30
         self.color = (1, 1, 1, 1)
@@ -142,18 +144,19 @@ class SubtitleWidget(Label):
         self.halign = 'center'
         self.valign = 'middle'
         self.text = ""
-        self.bind(pos=self.update_rectangle, size=self.update_rectangle)
+        self.bind(pos=self.update_rectangle, size=self.update_rectangle, text=self.update_text)
 
         with self.canvas:
             Color(1, 1, 1, 0)
             self.rect = Rectangle(pos=self.pos, size=self.size, group='subtitle')
-    def update_subtitle(self, text):
-        self.canvas.remove_group('subtitle')
-        if text is not None or text is not "":
-            with self.canvas:
-                Color(1, 1, 1, 0.5)
-                Rectangle(pos=self.pos, size=self.size, group='subtitle')
-        self.text = text
-    def update_rectangle(self, instance, value):
+
+        self.bind(texture_size=self.setter('size'))
+        self.update_text()
+
+    def update_text(self, *args):
+        self.text_size = (self.width, None)
+        self.texture_update()
+
+    def update_rectangle(self, *args):
         self.rect.pos = self.pos
         self.rect.size = self.size
